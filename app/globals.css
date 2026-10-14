@@ -4,6 +4,37 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* 우분투북스 브랜드 팔레트 (어스톤 웜 베이지 & 올리브) */
+@theme {
+    --color-cream: #f6f1e8;
+    --color-cream-deep: #ede4d4;
+    --color-stripe-a: #e9dec9;
+    --color-stripe-b: #f1e9da;
+    --color-ink: #2b2620;
+    --color-ink-sub: #5f574c;
+    --color-ink-muted: #9a9083;
+    --color-line: #ddd3c2;
+    --color-line-strong: #6f685d;
+    --color-olive: #6b6837;
+    --color-olive-dark: #57552c;
+    --color-olive-tint: #e6e5d2;
+    --color-footer: #2d2823;
+    --color-footer-text: #cfc6b8;
+    --color-footer-muted: #8a8174;
+    --color-footer-line: #423b34;
+
+    --container-page: 65rem;
+}
+
+/* 사진이 들어오기 전 이미지 자리 표시용 사선 패턴 */
+@utility bg-stripes {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        var(--color-stripe-a) 0 14px,
+        var(--color-stripe-b) 14px 28px
+    );
+}
+
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
