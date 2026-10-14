@@ -1,7 +1,7 @@
-import { Button } from '@/shared/components/ui/button';
+import MockLoginButton from '@/shared/components/MockLoginButton';
 import { cn } from '@/shared/utils/cn';
 import Link from 'next/link';
-import { FiGrid, FiShoppingBag, FiUser } from 'react-icons/fi';
+import { FiGrid, FiShoppingBag } from 'react-icons/fi';
 
 export default function Header() {
     return (
@@ -42,8 +42,10 @@ export default function Header() {
                         <span className="hidden md:inline">장바구니</span>
                     </Link>
 
-                    {/* 로그인 버튼 */}
-                    <Button
+                    {/* 로그인 버튼: 로그인 기능 전까지 테스트용 상태 전환 버튼 */}
+                    {/* 원래 버튼을 되살릴 때는 위 import에 Button(@/shared/components/ui/button)과
+                        FiUser(react-icons/fi)를 다시 추가하고, MockLoginButton을 지운다 */}
+                    {/* <Button
                         variant="outline"
                         size="sm"
                         className="h-9 px-2.5 md:px-3"
@@ -55,7 +57,8 @@ export default function Header() {
                             <FiUser className="h-3.5 w-3.5" />
                             <span className="text-xs md:text-sm">로그인</span>
                         </Link>
-                    </Button>
+                    </Button> */}
+                    <MockLoginButton />
                 </nav>
             </div>
         </header>
