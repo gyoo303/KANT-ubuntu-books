@@ -1,8 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# 파일 업로드 경로
-/uploads
-
 # dependencies
 /node_modules
 /.pnp
@@ -42,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 파일 업로드 경로
+/uploads
