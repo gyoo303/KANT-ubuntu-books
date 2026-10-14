@@ -8,7 +8,7 @@
         "prebuild": "npm run test",
         "start": "next start",
         "lint": "next lint",
-        "test": "node --import tsx --test '{app,domains,shared}/**/*.test.ts'",
+        "test": "node --import tsx --test \"{app,domains,shared}/**/*.test.ts\"",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
     },
