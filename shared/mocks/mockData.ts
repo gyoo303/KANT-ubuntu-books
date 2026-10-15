@@ -147,6 +147,7 @@ export const MOCK_FILES: FileInfo[] = [
 // 우분투북스 테마 서가 / 도서 Mock Data
 // 백엔드 상품 목록·상세 API가 나오면 domains/products/api/productApi.ts 에서 교체
 // ─────────────────────────────────────────────
+// 탭에 이름만 보여주는 테마 목록 — 실제 책은 '도심 속 텃밭과 흙'(garden)만 있어요.
 export const MOCK_THEMES: Theme[] = [
     {
         id: 'garden',
@@ -161,8 +162,7 @@ export const MOCK_THEMES: Theme[] = [
         id: 'table',
         name: '치유의 식탁',
         short_name: '치유의 식탁',
-        description:
-            '천천히 차려 먹는 한 끼가 하루를 다독여 주는 순간들. 부엌과 식탁에서 건져 올린 책들이에요.',
+        description: '',
         icon: 'soup',
         sort_order: 2,
     },
@@ -170,8 +170,7 @@ export const MOCK_THEMES: Theme[] = [
         id: 'nature',
         name: '자연과 함께 머물기',
         short_name: '자연과 머물기',
-        description:
-            '숲길, 바닷가, 동네 뒷산. 멀리 가지 않아도 자연 곁에 머무는 법을 알려주는 책들입니다.',
+        description: '',
         icon: 'leaf',
         sort_order: 3,
     },
@@ -179,8 +178,7 @@ export const MOCK_THEMES: Theme[] = [
         id: 'local',
         name: '지역과 연대',
         short_name: '지역과 연대',
-        description:
-            '골목의 가게, 마을의 사람들, 함께 사는 법을 고민하는 이웃들의 이야기를 모았어요.',
+        description: '',
         icon: 'map-pin',
         sort_order: 4,
     },
@@ -346,109 +344,6 @@ export const MOCK_PRODUCTS: Product[] = (
             sort_order: 12,
             cover_color: '#6e5440',
             one_line: '보이지 않는 곳에서 일하는 것들에 대하여.',
-        },
-        // 치유의 식탁
-        {
-            id: 'b101',
-            theme_id: 'table',
-            title: '느린 아침상',
-            price: 16500,
-            stock: 5,
-            sort_order: 1,
-            cover_color: '#c08a5a',
-            one_line: '밥 짓는 냄새로 하루를 여는 법.',
-        },
-        {
-            id: 'b102',
-            theme_id: 'table',
-            title: '제철 한 그릇',
-            price: 18800,
-            stock: 2,
-            sort_order: 2,
-            cover_color: '#7a5b3e',
-            one_line: '계절이 바뀔 때마다 다시 펼치게 되는 책.',
-        },
-        {
-            id: 'b103',
-            theme_id: 'table',
-            title: '엄마의 국자',
-            price: 14500,
-            stock: 0,
-            sort_order: 3,
-            cover_color: '#a45b4b',
-            one_line: '레시피보다 기억이 먼저 떠오르는 요리책.',
-        },
-        {
-            id: 'b104',
-            theme_id: 'table',
-            title: '혼자 먹는 저녁',
-            price: 15000,
-            stock: 6,
-            sort_order: 4,
-            cover_color: '#4e5b6e',
-            one_line: '나를 위해 차리는 밥상의 다정함.',
-        },
-        // 자연과 함께 머물기
-        {
-            id: 'b201',
-            theme_id: 'nature',
-            title: '뒷산 산책자',
-            price: 15800,
-            stock: 4,
-            sort_order: 1,
-            cover_color: '#55704f',
-            one_line: '매일 같은 길인데 매일 다른 숲.',
-        },
-        {
-            id: 'b202',
-            theme_id: 'nature',
-            title: '새를 기다리는 일',
-            price: 17500,
-            stock: 3,
-            sort_order: 2,
-            cover_color: '#8a9a8c',
-            one_line: '창밖을 오래 보는 사람이 되었어요.',
-        },
-        {
-            id: 'b203',
-            theme_id: 'nature',
-            title: '바다 곁의 일 년',
-            price: 19000,
-            stock: 1,
-            sort_order: 3,
-            cover_color: '#3f6a80',
-            one_line: '파도 소리를 받아 적은 열두 달.',
-        },
-        // 지역과 연대
-        {
-            id: 'b301',
-            theme_id: 'local',
-            title: '골목의 가게들',
-            price: 16000,
-            stock: 5,
-            sort_order: 1,
-            cover_color: '#8c5e48',
-            one_line: '오래된 간판 뒤에 사는 사람들.',
-        },
-        {
-            id: 'b302',
-            theme_id: 'local',
-            title: '함께 사는 동네',
-            price: 17200,
-            stock: 0,
-            sort_order: 2,
-            cover_color: '#5c5a7a',
-            one_line: '이웃이라는 말을 다시 배우는 책.',
-        },
-        {
-            id: 'b303',
-            theme_id: 'local',
-            title: '마을 부엌',
-            price: 14800,
-            stock: 4,
-            sort_order: 3,
-            cover_color: '#a07850',
-            one_line: '같이 만들고 나눠 먹는 공동 부엌 이야기.',
         },
     ] satisfies ProductSeed[]
 ).map(makeProduct);

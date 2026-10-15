@@ -35,7 +35,6 @@ export interface Product {
 export type ProductSort = 'recommended' | 'price_asc' | 'price_desc' | 'title';
 
 export interface ProductListQuery {
-    themeId: string | null; // null이면 전체
     hideSoldOut: boolean;
     sort: ProductSort;
     page: number;

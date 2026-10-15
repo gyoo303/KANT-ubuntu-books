@@ -4,7 +4,7 @@ import type {
 } from '@/domains/products/types/product.types';
 
 // 테마 서가(/) 의 URL 쿼리 ↔ 목록 조회 조건 변환
-// 예: /?theme=garden&page=2&soldout=hide&sort=price_asc
+// 예: /?page=2&soldout=hide&sort=price_asc
 
 export const BOOKSHELF_PATH = '/';
 
@@ -18,7 +18,6 @@ export const PRODUCT_SORT_OPTIONS: { value: ProductSort; label: string }[] = [
 const SORTS = PRODUCT_SORT_OPTIONS.map((o) => o.value);
 
 export const DEFAULT_BOOKSHELF_QUERY: ProductListQuery = {
-    themeId: null,
     hideSoldOut: false,
     sort: 'recommended',
     page: 1,
@@ -31,14 +30,11 @@ const first = (v: string | string[] | undefined) =>
 
 export function parseBookshelfQuery(
     searchParams: SearchParams,
-    validThemeIds: string[],
 ): ProductListQuery {
-    const theme = first(searchParams.theme);
     const sort = first(searchParams.sort) as ProductSort | undefined;
     const page = Number.parseInt(first(searchParams.page) ?? '', 10);
 
     return {
-        themeId: theme && validThemeIds.includes(theme) ? theme : null,
         hideSoldOut: first(searchParams.soldout) === 'hide',
         sort: sort && SORTS.includes(sort) ? sort : 'recommended',
         page: Number.isFinite(page) && page > 0 ? page : 1,
@@ -49,7 +45,6 @@ export function parseBookshelfQuery(
 export function buildBookshelfHref(query: Partial<ProductListQuery>): string {
     const q = { ...DEFAULT_BOOKSHELF_QUERY, ...query };
     const params = new URLSearchParams();
-    if (q.themeId) params.set('theme', q.themeId);
     if (q.page > 1) params.set('page', String(q.page));
     if (q.hideSoldOut) params.set('soldout', 'hide');
     if (q.sort !== 'recommended') params.set('sort', q.sort);
