@@ -24,7 +24,7 @@ export default function RootLayout({
     return (
         <html lang="ko" className="h-full">
             <body
-                className={`${notoSansKr.className} flex min-h-screen flex-col bg-white text-gray-900 antialiased`}
+                className={`${notoSansKr.className} bg-cream text-ink flex min-h-screen flex-col break-keep antialiased`}
             >
                 <Header />
                 <main className="w-full flex-1">{children}</main>

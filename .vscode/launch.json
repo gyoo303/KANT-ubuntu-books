@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "1. 패키지 설치 (npm install)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm install"
+        },
+        {
+            "name": "2. 개발 서버 실행 (npm run dev)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev",
+            "serverReadyAction": {
+                "pattern": "- Local:.+(https?://\\S+)",
+                "uriFormat": "%s/about",
+                "action": "openExternally"
+            }
+        }
+    ]
+}
