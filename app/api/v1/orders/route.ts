@@ -20,7 +20,17 @@ export async function POST() {
     }
 
     // TODO(cart-merge): 로그인 시 비회원 장바구니(localStorage)를 회원 장바구니로 합치기
+    //
     // TODO: 주문서 생성 및 토스 결제 승인 로직
-    //       주문자는 session.user.id(DB User.id)로 연결한다. 예: prisma.order.create({ data: { userId: session.user.id, ... } })
+    //   ※ 현재 장바구니 결제는 POST /api/payments/ready(결제 준비)가 이 역할을 대신하고 있다.
+    //     엔드포인트를 이쪽으로 합칠지 장바구니 담당과 정한다.
+    //   1) 요청 본문의 배송지를 검증한다. 휴대폰 번호는 가입 때 받지 않고 주문/구독 결제 화면에서 받는다.
+    //      shippingAddress = { receiverName, receiverPhone, zipCode, address1, address2 }
+    //      → validateShippingAddress()(domains/checkout/utils)와 같은 규칙으로 receiverPhone 형식을 확인하고, 틀리면 400
+    //   2) 주문자는 session.user.id로 연결한다. (지금은 네이버 사용자 고유번호, TODO(db): DB User.id)
+    //      TODO(db): prisma.order.create({ data: { userId: session.user.id, shippingAddress, ... } })
+    //   3) receiverPhone은 주문마다 저장한다. 받는 분이 본인이 아닐 수 있어서 User.phone과 분리한다.
+    //      요청에 saveAsMyPhone: true가 있으면 User.phone도 갱신한다. (다음 결제 때 연락처 칸을 미리 채우는 용도)
+    //      TODO(db): 지금은 결제 화면에서 LocalStorage에 임시 저장한다 (domains/checkout/storage/checkoutStorage.ts)
     return NextResponse.json({ ok: true });
 }

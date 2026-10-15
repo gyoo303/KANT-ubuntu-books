@@ -1,3 +1,4 @@
+import AuthSessionProvider from '@/shared/components/AuthSessionProvider';
 import Footer from '@/shared/components/Footer';
 import Header from '@/shared/components/Header';
 import type { Metadata } from 'next';
@@ -26,9 +27,12 @@ export default function RootLayout({
             <body
                 className={`${notoSansKr.className} bg-cream text-ink flex min-h-screen flex-col break-keep antialiased`}
             >
-                <Header />
-                <main className="w-full flex-1">{children}</main>
-                <Footer />
+                {/* 로그인 상태(useSession)를 헤더·장바구니 등 클라이언트 컴포넌트에서 읽기 위한 Provider */}
+                <AuthSessionProvider>
+                    <Header />
+                    <main className="w-full flex-1">{children}</main>
+                    <Footer />
+                </AuthSessionProvider>
             </body>
         </html>
     );

@@ -2,17 +2,10 @@
  * [장바구니 더미데이터]
  * 백엔드/DB가 없는 동안 화면과 서버 API가 쓰는 가짜 데이터.
  * - MOCK_CART_ITEMS: 장바구니 화면에 처음 보이는 상품 + 결제 준비 API의 "가격표" 역할
- * - MOCK_DEFAULT_ADDRESS: 배송지의 "기본 배송지" 탭에 보이는 주소
- * TODO: 장바구니는 localStorage/서버, 가격은 DB, 배송지는 회원 정보로 교체
+ * - 기본 배송지는 더미데이터 대신 로그인한 회원 기준으로 불러온다 (domains/checkout, TODO(db): 지금은 LocalStorage)
+ * TODO: 장바구니는 localStorage/서버, 가격은 DB로 교체
  */
-import { CartItem, ShippingAddress } from '@/domains/cart/types/cart.types';
-
-// 회원의 기본 배송지 (시안 06의 값)
-export const MOCK_DEFAULT_ADDRESS: ShippingAddress = {
-    recipient: '윤슬',
-    phone: '010-0000-0000',
-    address: '(34000) 대전광역시 유성구 ○○로 00, ○○동 ○○호',
-};
+import { CartItem } from '@/domains/cart/types/cart.types';
 
 // 장바구니 시안(05)과 같은 구성: 정상 2종 + 품절 1종
 export const MOCK_CART_ITEMS: CartItem[] = [

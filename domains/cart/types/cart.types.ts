@@ -18,10 +18,10 @@ export interface CartItem {
     sold_out: boolean; // 품절 여부 (품절이면 선택·주문 불가)
 }
 
-// 배송지 정보
+// 배송지 정보 (DB 스키마 shippingAddress의 receiverName / receiverPhone / address1에 해당)
 export interface ShippingAddress {
     recipient: string; // 받는 분
-    phone: string; // 연락처
+    phone: string; // 받는 분 연락처 (receiverPhone). 회원 본인 연락처(User.phone)와는 별개
     address: string; // 주소
 }
 

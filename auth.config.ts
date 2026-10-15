@@ -15,9 +15,15 @@
  * 2) 사용자가 네이버 로그인 또는 이메일 매직 링크로 인증
  * 3) Auth.js가 JWT(암호화된 토큰)를 쿠키에 저장 → redirect 콜백으로 callbackUrl 검증 후 원래 페이지로 복귀
  * 4) 이후 요청마다 쿠키의 JWT를 복호화해 auth 객체를 만들고 authorized 콜백이 다시 판단
+ *
+ * ⚠️ [현재 임시 상태] DB 없이 동작한다 (auth.ts 상단 주석 참고).
+ * - TODO(db): 권한(role)은 DB User.role 대신 환경변수 ADMIN_EMAILS로 정한다.
+ * - TODO(db): session.user.id는 DB User.id 대신 네이버 사용자 고유번호다.
  */
 import type { NextAuthConfig } from 'next-auth';
 import Naver from 'next-auth/providers/naver';
+import { isAdminEmail } from '@/domains/auth/utils/adminEmails';
+import { toSafeCallbackUrl } from '@/shared/utils/safeCallbackUrl';
 // TODO(kakao): 비즈 앱 전환 후 이메일 필수 동의를 받을 수 있게 되면 활성화.
 //              전화번호까지 받으려면 사업자 인증이 필요한지 확인할 것.
 // import Kakao from 'next-auth/providers/kakao';
@@ -26,6 +32,8 @@ import Naver from 'next-auth/providers/naver';
 const MEMBER_ONLY_PREFIXES = ['/mypage', '/subscription/letter'];
 /** 점주(ADMIN)만 들어갈 수 있는 경로 */
 const ADMIN_PREFIX = '/admin';
+/** 로그인 화면 경로 */
+const SIGN_IN_PATH = '/auth/signin';
 
 export default {
     /**
@@ -44,20 +52,24 @@ export default {
              * 다른 사람이 내 이메일로 SNS 계정을 만들어 내 계정을 가로채는 것을 막기 위한 기본 방어다.
              * 우리는 네이버가 넘겨주는 이메일을 신뢰하기로 하고, 같은 이메일이면 같은 사람으로 보아
              * 기존 User에 Account(연동 정보)를 하나 더 붙여 한 계정으로 합친다. (팀 결정 사항)
+             * TODO(db): 계정 연결은 DB(어댑터)가 있어야 동작한다. 지금은 설정만 미리 켜 둔 상태다.
              */
             allowDangerousEmailAccountLinking: true,
             /**
              * 네이버가 돌려준 프로필을 우리 User 모양으로 변환한다.
-             * 여기서 반환한 값이 신규 가입 시 Prisma 어댑터의 createUser로 그대로 전달된다.
-             * (id는 어댑터가 버리고 DB의 uuid 기본값을 쓴다)
+             * - 지금(DB 없음): 여기서 반환한 id가 그대로 JWT의 sub → session.user.id가 된다.
+             * - TODO(db): 어댑터를 켜면 이 값이 신규 가입 시 createUser로 전달되고,
+             *   id는 어댑터가 버리고 DB의 uuid 기본값을 쓴다.
+             *
+             * 휴대폰 번호는 가입 시점에 받지 않는다. 구독·책 결제 화면의 배송지 연락처(receiverPhone)로 받고,
+             * 사용자가 원하면 "내 연락처"(User.phone)로 저장해 다음 결제 때 미리 채운다.
+             * TODO(db): 네이버 '휴대전화번호' 동의 항목을 켜면 p.response.mobile로 User.phone을 미리 채울 수 있다.
              */
             profile: (p) => ({
                 id: p.response.id,
                 name: p.response.name ?? null,
                 email: p.response.email,
                 image: p.response.profile_image ?? null,
-                // 네이버 개발자센터 앱 설정에서 '휴대전화번호' 동의 항목을 켠 경우에만 들어옴
-                phone: p.response.mobile ?? null,
             }),
         }),
         // TODO(kakao): Kakao({ allowDangerousEmailAccountLinking: true }),
@@ -68,10 +80,11 @@ export default {
      * signIn을 지정하면 "로그인이 필요할 때" 이 경로로 보내면서 callbackUrl 쿼리를 붙여 준다.
      */
     pages: {
-        signIn: '/auth/signin',
-        // TODO(screens): 디자인이 나오면 연결. 그전까지는 Auth.js 기본 화면 사용
-        // verifyRequest: '/auth/verify', // "메일을 확인하세요" 안내
-        // error: '/auth/error',
+        signIn: SIGN_IN_PATH,
+        // 로그인 오류(네이버 로그인 취소·실패 등)도 별도 화면 없이 로그인 화면에서 안내한다.
+        // Auth.js가 /auth/signin?error=<오류 코드> 로 보내 준다.
+        error: SIGN_IN_PATH,
+        // TODO(email): verifyRequest('메일을 확인하세요' 안내)는 이메일 로그인을 쓰지 않아 두지 않는다.
     },
 
     /**
@@ -92,6 +105,16 @@ export default {
          */
         authorized({ auth, request: { nextUrl } }) {
             const path = nextUrl.pathname;
+
+            // 이미 로그인한 사람이 로그인 화면에 오면 돌아갈 곳(없으면 홈)으로 바로 보낸다
+            if (path === SIGN_IN_PATH && auth?.user) {
+                const destination = toSafeCallbackUrl(
+                    nextUrl.searchParams.get('callbackUrl'),
+                    nextUrl.origin,
+                );
+                return Response.redirect(new URL(destination, nextUrl));
+            }
+
             const isAdmin = path.startsWith(ADMIN_PREFIX);
             const needsLogin =
                 isAdmin || MEMBER_ONLY_PREFIXES.some((p) => path.startsWith(p));
@@ -107,19 +130,27 @@ export default {
 
         /**
          * [JWT 만들기] 토큰이 만들어지거나 갱신될 때 호출된다.
-         * user는 "막 로그인한 순간"에만 들어오고(DB의 User), 이후 요청에서는 undefined다.
+         * user는 "막 로그인한 순간"에만 들어오고, 이후 요청에서는 undefined다.
          * 그래서 로그인 순간에 role을 토큰에 복사해 두어야 이후 요청에서도 권한을 알 수 있다.
-         * 주의: 관리자 권한을 DB에서 바꾸면 다시 로그인해야 토큰에 반영된다.
+         * 주의: 관리자 목록을 바꾸면 다시 로그인해야 토큰에 반영된다.
+         *
+         * TODO(db): DB를 켜면 user.role(DB User.role)을 쓰고 ADMIN_EMAILS 판별은 지운다.
+         *   if (user) token.role = user.role ?? 'MEMBER';
          */
         jwt({ token, user }) {
-            if (user) token.role = user.role ?? 'MEMBER';
+            if (user) {
+                token.role = isAdminEmail(user.email, process.env.ADMIN_EMAILS)
+                    ? 'ADMIN'
+                    : 'MEMBER';
+            }
             return token;
         },
 
         /**
          * [세션 만들기] auth() / useSession()이 돌려줄 session 객체를 만든다.
          * JWT 전략에서 Auth.js는 기본으로 name·email·image만 session.user에 넣는다.
-         * 사용자 id(DB User.id)는 토큰의 sub(subject) 필드에만 있으므로 직접 옮겨 줘야
+         * 사용자 id는 토큰의 sub(subject) 필드에만 있으므로 직접 옮겨 줘야
+         * (지금은 네이버 사용자 고유번호, TODO(db): DB를 켜면 DB User.id)
          * 주문 생성 등에서 session.user.id로 "누가 요청했는지"를 찾을 수 있다.
          * role도 토큰에 넣어 둔 값을 꺼내 화면·API에서 쓸 수 있게 한다.
          */

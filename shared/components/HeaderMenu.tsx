@@ -1,5 +1,6 @@
 'use client';
 
+import HeaderAuthLinks from '@/shared/components/HeaderAuthLinks';
 import { NAV_ITEMS } from '@/shared/constants/navigation';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
@@ -43,13 +44,7 @@ export default function HeaderMenu() {
                                 {item.label}
                             </Link>
                         ))}
-                        <Link
-                            href="/auth/signin"
-                            onClick={close}
-                            className={DRAWER_LINK}
-                        >
-                            로그인
-                        </Link>
+                        <HeaderAuthLinks variant="drawer" onNavigate={close} />
                         <Link
                             href="/subscription"
                             onClick={close}

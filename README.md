@@ -137,47 +137,24 @@ npm install
 
 ### 2. Environment Variables (.env)
 
-루트 경로의 `.env.example`을 `.env`로 복사한 뒤 아래 항목을 설정합니다.
+`.env.example`을 `.env`로 복사한 뒤 값을 채웁니다. 네이버 로그인 로컬 테스트에는 아래 3개만 있으면 됩니다.
+**Docker, DB, 메일 서버는 필요 없습니다.**
 
 ```env
-DATABASE_URL="postgresql://username:password@localhost:5432/ubuntubooks?schema=public"
-
-# Auth.js (v5)
-AUTH_SECRET="your-auth-secret"   # npx auth secret 으로 생성
-AUTH_URL="http://localhost:3000"
-
-# Social Auth Providers
-# TODO(kakao): 카카오 provider 활성화 시 사용
-# AUTH_KAKAO_ID="your-kakao-client-id"
-# AUTH_KAKAO_SECRET="your-kakao-client-secret"
-AUTH_NAVER_ID="your-naver-client-id"
-AUTH_NAVER_SECRET="your-naver-client-secret"
-
-# Email Magic Link (SMTP)
-EMAIL_SERVER="smtp://user:pass@smtp.example.com:587"
-EMAIL_FROM="우분투북스 <no-reply@example.com>"
-
-# Toss Payments
-TOSS_PAYMENTS_SECRET_KEY="test_sk_..."
-NEXT_PUBLIC_TOSS_PAYMENTS_CLIENT_KEY="test_ck_..."
+AUTH_SECRET="..."        # npx auth secret 으로 생성
+AUTH_NAVER_ID="..."
+AUTH_NAVER_SECRET="..."
+ADMIN_EMAILS=""          # (선택) 임시 관리자 이메일, 쉼표로 구분
 ```
 
-### 3. 로컬 인프라 (Postgres + 테스트용 메일함)
+네이버 개발자센터에서 애플리케이션을 등록할 때:
 
-Docker로 개발용 DB와 테스트용 SMTP 서버([Mailpit](https://mailpit.axllent.org/))를 띄웁니다.
-`.env.example`의 기본값이 이 구성에 맞춰져 있습니다.
+- 사용 API: 네이버 로그인 / 제공 정보: **이메일(필수)**, 이름
+- 서비스 URL: `http://localhost:3000`
+- Callback URL: `http://localhost:3000/api/auth/callback/naver`
+- 검수 전("개발 중")에는 앱 등록자와 **멤버관리에 등록한 네이버 아이디만** 로그인할 수 있습니다.
 
-```bash
-cp .env.example .env       # AUTH_SECRET은 npx auth secret 으로 채우기
-npm run infra:up           # Postgres(5432) + Mailpit(SMTP 1025 / 웹 8025)
-npx prisma migrate dev     # 스키마를 DB에 반영 + Prisma Client 생성
-npm run mail:test          # SMTP 설정 확인용 테스트 메일 발송
-```
-
-Mailpit은 앱이 보내는 메일을 실제로 발송하지 않고 가로채 보관합니다.
-받은 메일은 [http://localhost:8025](http://localhost:8025)에서 확인할 수 있습니다.
-
-### 4. Run Development Server
+### 3. Run Development Server
 
 ```bash
 npm run dev
@@ -185,14 +162,23 @@ npm run dev
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)으로 접속하여 플랫폼을 확인합니다.
 
-### 5. 이메일 로그인 테스트
+### 4. 로그인 테스트
 
 1. `/mypage`에 접속하면 `/auth/signin?callbackUrl=...`로 이동합니다 (로그인 필요 페이지).
-2. 로그인/회원가입 화면에서 이메일을 입력하면 매직 링크 메일이 발송됩니다.
-    - 화면이 아직 없다면 Auth.js 기본 화면(`/api/auth/signin`)으로 테스트할 수 있습니다.
-    - 로그인 탭은 **가입된 이메일만** 링크를 보냅니다. `npx prisma studio`로 User를 먼저 추가하거나 회원가입 액션을 사용하세요.
-3. [http://localhost:8025](http://localhost:8025)에서 메일을 열어 링크를 누르면 로그인되고 원래 페이지로 돌아갑니다.
-4. 관리자 테스트: `npx prisma studio`에서 User의 `role`을 `ADMIN`으로 바꾼 뒤 **다시 로그인**해야 반영됩니다 (권한은 로그인 시점에 JWT에 저장됨).
+2. **네이버로 계속하기**를 누르면 네이버 로그인 후 원래 페이지로 돌아옵니다. 처음이면 자동으로 가입됩니다.
+3. 헤더에 마이페이지 · 로그아웃이 보이면 성공입니다.
+4. 장바구니(`/cart`)에서 **구매 계속하기** → 배송지의 연락처 칸에서 휴대폰 번호를 입력합니다 (가입 때는 받지 않음).
+
+### ⚠️ 임시 상태 (TODO)
+
+| 항목                  | 현재                                      | 나중에                                      |
+| --------------------- | ----------------------------------------- | ------------------------------------------- |
+| `TODO(db)`            | DB 없음. 로그인은 JWT 쿠키만 사용         | Prisma 어댑터 + `npx prisma migrate dev`    |
+| 회원 id               | 네이버 사용자 고유번호                    | DB `User.id`                                |
+| 관리자 권한           | `.env`의 `ADMIN_EMAILS`                   | DB `User.role`                              |
+| 내 연락처·기본 배송지 | 브라우저 LocalStorage (이 브라우저에서만) | DB `User.phone` · 회원 배송지               |
+| `TODO(email)`         | 이메일 가입·로그인 꺼짐                   | Nodemailer + `docker-compose.yml`의 Mailpit |
+| `TODO(kakao)`         | 카카오 로그인 꺼짐                        | 비즈 앱 전환 후 활성화                      |
 
 ---
 

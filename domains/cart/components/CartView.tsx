@@ -6,39 +6,43 @@
  * 오른쪽: 주문 금액 카드
  *
  * 버튼 흐름
- * - "구매 계속하기" → 비회원이면 /login 으로 이동, 회원이면 배송지/결제 수단을 펼친다.
- * - "N원 결제하기" → 토스 결제창을 연다. (결제 동의 체크해야 활성화)
+ * - "구매 계속하기" → 비회원이면 로그인 화면(/auth/signin?callbackUrl=/cart)으로 이동,
+ *   회원이면 배송지/결제 수단을 펼친다. 로그인하면 장바구니로 돌아온다.
+ * - "N원 결제하기" → 토스 결제창을 연다. (배송지를 모두 입력하고 결제 동의를 체크해야 활성화)
+ *
+ * 로그인 상태는 next-auth의 useSession()으로 읽는다. (layout.tsx의 AuthSessionProvider)
  *
  * 'use client'(맨 위): 클릭·상태 변경이 필요한 화면이라 브라우저에서 동작하는 컴포넌트로 만든다.
  */
 
 import CheckoutSections from '@/domains/cart/components/CheckoutSections';
-import {
-    CartItem,
-    PaymentMethod,
-    ShippingAddress,
-} from '@/domains/cart/types/cart.types';
+import { CartItem, PaymentMethod } from '@/domains/cart/types/cart.types';
 import {
     calculateCart,
     FREE_SHIPPING_THRESHOLD,
 } from '@/domains/cart/utils/calculateCart';
+import { useCheckoutContact } from '@/domains/checkout/hooks/useCheckoutContact';
 import { requestTossPayment } from '@/domains/payments/client/requestTossPayment';
-import { useMockLoggedIn } from '@/shared/mocks/mockAuth';
 import { cn } from '@/shared/utils/cn';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { AlertCircle, Minus, Plus, X } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+// 로그인 후 돌아올 주소를 붙인 로그인 화면 주소
+const SIGN_IN_URL = `/auth/signin?callbackUrl=${encodeURIComponent('/cart')}`;
+
 export default function CartView({
     initialItems,
-    defaultAddress,
 }: {
     initialItems: CartItem[]; // 처음 보여줄 장바구니 상품 (지금은 더미데이터)
-    defaultAddress: ShippingAddress; // 기본 배송지 (지금은 더미데이터)
 }) {
     const router = useRouter(); // 페이지 이동용
-    const isLoggedIn = useMockLoggedIn(); // 헤더의 테스트용 로그인 버튼 상태
+    const { data: session, status } = useSession(); // 로그인 상태
+    const isLoggedIn = status === 'authenticated';
+    // 배송지(받는 분·연락처·주소) 상태. 회원 id별로 내 연락처·기본 배송지를 불러온다
+    const contact = useCheckoutContact(session?.user.id);
 
     // ── 화면 상태 ──
     const [items, setItems] = useState(initialItems); // 장바구니 상품 목록
@@ -55,8 +59,7 @@ export default function CartView({
     // "구매 계속하기" 버튼
     const continuePurchase = () => {
         if (!isLoggedIn) {
-            // TODO: 로그인 페이지는 다른 담당이라 아직 없음 (현재 404)
-            router.push('/login');
+            router.push(SIGN_IN_URL);
             return;
         }
         setCheckoutRequested(true); // 배송지/결제 수단 영역을 펼친다
@@ -64,9 +67,12 @@ export default function CartView({
 
     // "N원 결제하기" 버튼: 토스 결제창을 연다 (자세한 흐름은 requestTossPayment.ts)
     const pay = async () => {
+        if (!contact.isValid) return;
         setPaying(true);
         try {
-            await requestTossPayment(items, payment);
+            // 새 배송지로 주문하면 다음 결제 때 쓰도록 기억 (TODO(db): 지금은 LocalStorage 임시 저장)
+            contact.rememberForNextOrder();
+            await requestTossPayment(items, payment, contact.address);
         } catch (error) {
             // 결제창을 닫은 경우 등은 failUrl로 이동하므로 여기서는 결제창을 열기 전 오류만 처리
             alert(error instanceof Error ? error.message : String(error));
@@ -168,7 +174,7 @@ export default function CartView({
                         {/* 회원이 "구매 계속하기"를 누른 뒤에만 배송지/결제 수단을 보여준다 */}
                         {checkingOut && (
                             <CheckoutSections
-                                defaultAddress={defaultAddress}
+                                contact={contact}
                                 payment={payment}
                                 onPaymentChange={setPayment}
                             />
@@ -228,11 +234,12 @@ export default function CartView({
                                     />
                                     주문 내용 확인 및 결제 동의
                                 </label>
-                                {/* 동의 안 함 / 결제창 여는 중 / 주문할 상품 없음 → 비활성화 */}
+                                {/* 배송지 미완성 / 동의 안 함 / 결제창 여는 중 / 주문할 상품 없음 → 비활성화 */}
                                 <button
                                     type="button"
                                     onClick={pay}
                                     disabled={
+                                        !contact.isValid ||
                                         !agreed ||
                                         paying ||
                                         summary.kind_count === 0
@@ -242,13 +249,22 @@ export default function CartView({
                                     {formatPrice(summary.payment_total)}{' '}
                                     결제하기
                                 </button>
+                                {!contact.isValid && (
+                                    <p className="mt-3 text-center text-xs text-[#8a8278]">
+                                        배송지를 모두 입력하면 결제할 수 있어요.
+                                    </p>
+                                )}
                             </>
                         ) : (
                             // 처음 상태: 구매 계속하기 버튼 (주문할 상품이 없으면 비활성화)
                             <button
                                 type="button"
                                 onClick={continuePurchase}
-                                disabled={summary.kind_count === 0}
+                                // 로그인 상태 확인 중(loading)에는 잠깐 비활성화
+                                disabled={
+                                    summary.kind_count === 0 ||
+                                    status === 'loading'
+                                }
                                 className="mt-8 h-14 w-full rounded-full bg-[#636b3a] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
                             >
                                 구매 계속하기

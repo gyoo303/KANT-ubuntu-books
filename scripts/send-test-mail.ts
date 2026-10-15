@@ -1,6 +1,8 @@
 /**
  * SMTP 설정 확인용 테스트 메일 발송 스크립트
  *
+ * TODO(email): 이메일 로그인을 쓰지 않는 동안에는 필요 없다. 이메일 로그인을 다시 켤 때 사용한다.
+ *
  *   npm run mail:test                    → EMAIL_FROM 주소로 발송
  *   npm run mail:test -- you@example.com → 지정한 주소로 발송
  *

@@ -1,3 +1,7 @@
+# ⚠️ 현재는 필요 없음: 앱이 DB(TODO(db))와 이메일 로그인(TODO(email))을 쓰지 않는다.
+#    네이버 로그인 로컬 테스트는 Docker 없이 .env만 채우면 된다 (README 참고).
+#    DB·이메일 로그인을 다시 켤 때 아래 구성을 사용한다.
+#
 # 로컬 개발/테스트용 인프라
 #   npm run infra:up    → 시작
 #   npm run infra:down  → 종료 (DB 데이터는 볼륨에 남음)

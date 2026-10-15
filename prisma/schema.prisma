@@ -1,3 +1,8 @@
+// ⚠️ TODO(db): 현재 앱은 이 스키마(DB)를 사용하지 않는다.
+//   DB가 정해질 때까지 로그인은 JWT 쿠키만, 사용자 연락처·배송지는 브라우저 LocalStorage에 임시 저장한다.
+//   (domains/checkout/storage/checkoutStorage.ts 참고)
+//   DB를 켤 때: auth.ts의 PrismaAdapter, lib/prisma.ts 주석 해제 → DATABASE_URL 설정 → npx prisma migrate dev
+//
 // 우분투북스 통합 스펙 v3.3 (5장) 기준 스키마
 // + 인증(Auth.js) 반영: User 필드 조정, Account·VerificationToken 추가
 //   세션은 JWT 전략이므로 Session 모델은 두지 않는다.
@@ -19,12 +24,14 @@ model User {
   email          String    @unique
   emailVerified  DateTime? // Auth.js 어댑터 필수
   name           String? // 네이버 동의 범위에 따라 비어 있을 수 있음
-  phone          String? // 소셜 가입자는 비어 있음
-  // TODO(screens): 소셜 가입자의 휴대폰을 받는 '추가 정보 입력' 화면 필요
+  // 회원 본인 연락처. 가입 때는 받지 않고, 결제 화면에서 "내 연락처로 저장"을 고르면 채워진다.
+  // 다음 결제 때 배송지 연락처(receiverPhone)를 미리 채우는 용도로만 쓴다.
+  // 실제 배송 연락처는 주문·구독마다 shippingAddress.receiverPhone에 따로 저장한다 (받는 분이 본인이 아닐 수 있음).
+  phone          String?
   image          String?
   role           UserRole  @default(MEMBER) // MEMBER, ADMIN
-  termsAgreedAt  DateTime? // 이메일 가입만 기록. 소셜 가입은 약관 동의를 별도로 받지 않음
-  marketingOptIn Boolean   @default(false)
+  termsAgreedAt  DateTime? // TODO(email): 이메일 가입에서만 기록. 소셜 가입은 약관 동의를 별도로 받지 않음
+  marketingOptIn Boolean   @default(false) // TODO(email): 이메일 가입 화면의 [선택] 뉴스레터 동의
   createdAt      DateTime  @default(now())
 
   accounts      Account[]
@@ -64,7 +71,7 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-// 이메일 매직 링크 토큰 (Auth.js 어댑터가 관리)
+// TODO(email): 이메일 매직 링크 토큰 (Auth.js 어댑터가 관리). 이메일 로그인을 켤 때만 사용
 // - identifier: 메일을 받은 이메일 주소
 // - token: 링크에 담긴 토큰의 해시값 (원본은 메일에만 있음)
 // - 링크를 누르면 대조 후 즉시 삭제되는 1회용이며, expires가 지나면 쓸 수 없다.
@@ -87,7 +94,7 @@ model Subscription {
   planType        String // "MONTHLY_SINGLE_TEA", "MONTHLY_DOUBLE"
   billingKey      String // 토스 빌링키
   nextBillingDate DateTime
-  shippingAddress Json // { zipCode, address1, address2, receiverName, receiverPhone }
+  shippingAddress Json // { zipCode, address1, address2, receiverName, receiverPhone } ← receiverPhone: 구독 결제 화면에서 입력
   createdAt       DateTime           @default(now())
 }
 
@@ -194,7 +201,7 @@ model Order {
   totalAmount     Int
   paymentKey      String?
   status          OrderStatus @default(PAID)
-  shippingAddress Json
+  shippingAddress Json // { zipCode, address1, address2, receiverName, receiverPhone } ← receiverPhone: 책 결제 화면에서 입력
   orderItems      OrderItem[]
   createdAt       DateTime    @default(now())
 }

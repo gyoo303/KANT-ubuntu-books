@@ -3,14 +3,18 @@
  * "N원 결제하기" 버튼을 누르면 CartView가 이 함수를 부른다.
  *
  * 순서
- * 1) 서버(/api/payments/ready)에 "무엇을 몇 권 살지"만 보내고, 주문번호·결제 금액을 받는다.
+ * 1) 서버(/api/payments/ready)에 "무엇을 몇 권 살지"와 배송지를 보내고, 주문번호·결제 금액을 받는다.
  *    (금액은 서버가 계산한다. 브라우저에서 금액을 조작해도 소용없게 하기 위해서)
  * 2) 토스 SDK를 불러와 결제창을 연다.
  * 3) 결제창에서 인증이 끝나면 토스가 브라우저를 이동시킨다.
  *    성공 → /cart/success?paymentKey=…&orderId=…&amount=…
  *    실패·취소 → /cart/fail?code=…&message=…
  */
-import { CartItem, PaymentMethod } from '@/domains/cart/types/cart.types';
+import {
+    CartItem,
+    PaymentMethod,
+    ShippingAddress,
+} from '@/domains/cart/types/cart.types';
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 // 결제하기 버튼: 서버에서 주문번호/금액을 받은 뒤 토스 결제창을 연다.
@@ -18,6 +22,7 @@ import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 export async function requestTossPayment(
     items: CartItem[],
     method: PaymentMethod,
+    shippingAddress: ShippingAddress, // 배송지 (phone = 받는 분 연락처 receiverPhone)
 ) {
     // 클라이언트 키: 브라우저에 노출돼도 되는 키 (.env.local의 NEXT_PUBLIC_ 변수)
     const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
@@ -25,7 +30,7 @@ export async function requestTossPayment(
         throw new Error('.env.local에 NEXT_PUBLIC_TOSS_CLIENT_KEY가 없어요.');
     }
 
-    // 1) 주문 준비: 선택된(품절 아닌) 상품의 ID와 수량만 서버로 보낸다
+    // 1) 주문 준비: 선택된(품절 아닌) 상품의 ID와 수량 + 배송지를 서버로 보낸다
     const response = await fetch('/api/payments/ready', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,6 +38,7 @@ export async function requestTossPayment(
             items: items
                 .filter((item) => item.selected && !item.sold_out)
                 .map(({ product_id, quantity }) => ({ product_id, quantity })),
+            shippingAddress,
         }),
     });
     const order = await response.json(); // { orderId, orderName, amount }
