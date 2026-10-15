@@ -162,12 +162,20 @@ TOSS_PAYMENTS_SECRET_KEY="test_sk_..."
 NEXT_PUBLIC_TOSS_PAYMENTS_CLIENT_KEY="test_ck_..."
 ```
 
-### 3. Database Migration & Prisma Client
+### 3. 로컬 인프라 (Postgres + 테스트용 메일함)
+
+Docker로 개발용 DB와 테스트용 SMTP 서버([Mailpit](https://mailpit.axllent.org/))를 띄웁니다.
+`.env.example`의 기본값이 이 구성에 맞춰져 있습니다.
 
 ```bash
-npx prisma migrate dev --name init
-npx prisma generate
+cp .env.example .env       # AUTH_SECRET은 npx auth secret 으로 채우기
+npm run infra:up           # Postgres(5432) + Mailpit(SMTP 1025 / 웹 8025)
+npx prisma migrate dev     # 스키마를 DB에 반영 + Prisma Client 생성
+npm run mail:test          # SMTP 설정 확인용 테스트 메일 발송
 ```
+
+Mailpit은 앱이 보내는 메일을 실제로 발송하지 않고 가로채 보관합니다.
+받은 메일은 [http://localhost:8025](http://localhost:8025)에서 확인할 수 있습니다.
 
 ### 4. Run Development Server
 
@@ -176,6 +184,15 @@ npm run dev
 ```
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)으로 접속하여 플랫폼을 확인합니다.
+
+### 5. 이메일 로그인 테스트
+
+1. `/mypage`에 접속하면 `/auth/signin?callbackUrl=...`로 이동합니다 (로그인 필요 페이지).
+2. 로그인/회원가입 화면에서 이메일을 입력하면 매직 링크 메일이 발송됩니다.
+    - 화면이 아직 없다면 Auth.js 기본 화면(`/api/auth/signin`)으로 테스트할 수 있습니다.
+    - 로그인 탭은 **가입된 이메일만** 링크를 보냅니다. `npx prisma studio`로 User를 먼저 추가하거나 회원가입 액션을 사용하세요.
+3. [http://localhost:8025](http://localhost:8025)에서 메일을 열어 링크를 누르면 로그인되고 원래 페이지로 돌아갑니다.
+4. 관리자 테스트: `npx prisma studio`에서 User의 `role`을 `ADMIN`으로 바꾼 뒤 **다시 로그인**해야 반영됩니다 (권한은 로그인 시점에 JWT에 저장됨).
 
 ---
 

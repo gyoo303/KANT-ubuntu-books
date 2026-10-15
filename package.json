@@ -10,7 +10,10 @@
         "lint": "next lint",
         "test": "node --import tsx --test '{app,domains,shared}/**/*.test.ts'",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "infra:up": "docker compose up -d",
+        "infra:down": "docker compose down",
+        "mail:test": "node --env-file=.env --import tsx scripts/send-test-mail.ts"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.11.3",

@@ -1,0 +1,27 @@
+# 로컬 개발/테스트용 인프라
+#   npm run infra:up    → 시작
+#   npm run infra:down  → 종료 (DB 데이터는 볼륨에 남음)
+#
+# - postgres: 개발용 DB (localhost:5432, 계정/비밀번호/DB명 모두 .env.example과 동일)
+# - mailpit:  테스트용 SMTP 서버. 앱이 보내는 메일을 실제로 발송하지 않고 가로채서 보관한다.
+#             SMTP 수신: localhost:1025 / 받은 메일함 웹 화면: http://localhost:8025
+services:
+    postgres:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_USER: ubuntu
+            POSTGRES_PASSWORD: ubuntu
+            POSTGRES_DB: ubuntubooks
+        ports:
+            - '5432:5432'
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+
+    mailpit:
+        image: axllent/mailpit:v1.27
+        ports:
+            - '1025:1025'
+            - '8025:8025'
+
+volumes:
+    postgres-data:
