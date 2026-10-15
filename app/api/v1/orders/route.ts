@@ -14,12 +14,13 @@ import { auth } from '@/auth';
 
 export async function POST() {
     const session = await auth();
-    if (!session?.user) {
+    if (!session?.user?.id) {
         // 프론트는 401을 받으면 /auth/signin?callbackUrl=/cart 로 이동시킨다
         return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
     // TODO(cart-merge): 로그인 시 비회원 장바구니(localStorage)를 회원 장바구니로 합치기
     // TODO: 주문서 생성 및 토스 결제 승인 로직
+    //       주문자는 session.user.id(DB User.id)로 연결한다. 예: prisma.order.create({ data: { userId: session.user.id, ... } })
     return NextResponse.json({ ok: true });
 }

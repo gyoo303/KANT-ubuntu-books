@@ -16,9 +16,12 @@ declare module 'next-auth' {
         role?: UserRole;
         phone?: string | null;
     }
-    /** auth() / useSession()이 돌려주는 값 */
+    /**
+     * auth() / useSession()이 돌려주는 값
+     * id는 DB User.id (auth.config.ts의 session 콜백에서 token.sub를 옮겨 넣음)
+     */
     interface Session {
-        user: { role: UserRole } & DefaultSession['user'];
+        user: { id: string; role: UserRole } & DefaultSession['user'];
     }
 }
 

@@ -118,10 +118,16 @@ export default {
 
         /**
          * [세션 만들기] auth() / useSession()이 돌려줄 session 객체를 만든다.
-         * 토큰에 넣어 둔 role을 session.user.role로 꺼내 화면·API에서 쓸 수 있게 한다.
+         * JWT 전략에서 Auth.js는 기본으로 name·email·image만 session.user에 넣는다.
+         * 사용자 id(DB User.id)는 토큰의 sub(subject) 필드에만 있으므로 직접 옮겨 줘야
+         * 주문 생성 등에서 session.user.id로 "누가 요청했는지"를 찾을 수 있다.
+         * role도 토큰에 넣어 둔 값을 꺼내 화면·API에서 쓸 수 있게 한다.
          */
         session({ session, token }) {
-            if (session.user) session.user.role = token.role ?? 'MEMBER';
+            if (session.user) {
+                if (token.sub) session.user.id = token.sub;
+                session.user.role = token.role ?? 'MEMBER';
+            }
             return session;
         },
 
