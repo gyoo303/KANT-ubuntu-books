@@ -128,3 +128,20 @@
         @apply font-sans;
     }
 }
+
+/* 우분투북스 브랜드 컬러 (어스톤 웜 베이지 & 올리브) — bg-ub-bg, text-ub-olive 처럼 사용 */
+@theme {
+    --color-ub-bg: #f6f1e8;
+    --color-ub-card: #ede4d3;
+    --color-ub-card-hover: #e7dcc6;
+    --color-ub-cream: #fbf5ea;
+    --color-ub-ink: #2a2520;
+    --color-ub-sub: #6f665b;
+    --color-ub-muted: #a09685;
+    --color-ub-line: #e2d8c6;
+    --color-ub-border: #d6cbb6;
+    --color-ub-olive: #636537;
+    --color-ub-olive-dark: #55572e;
+    --color-ub-olive-soft: #e3e6d6;
+    --font-ub-serif: var(--font-noto-serif-kr), serif;
+}
