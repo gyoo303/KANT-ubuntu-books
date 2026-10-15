@@ -137,20 +137,25 @@ npm install
 
 ### 2. Environment Variables (.env)
 
-루트 경로에 `.env` 파일을 생성하고 아래 항목을 설정합니다.
+루트 경로의 `.env.example`을 `.env`로 복사한 뒤 아래 항목을 설정합니다.
 
 ```env
 DATABASE_URL="postgresql://username:password@localhost:5432/ubuntubooks?schema=public"
 
-# NextAuth
-NEXTAUTH_SECRET="your-nextauth-secret"
-NEXTAUTH_URL="http://localhost:3000"
+# Auth.js (v5)
+AUTH_SECRET="your-auth-secret"   # npx auth secret 으로 생성
+AUTH_URL="http://localhost:3000"
 
 # Social Auth Providers
-KAKAO_CLIENT_ID="your-kakao-client-id"
-KAKAO_CLIENT_SECRET="your-kakao-client-secret"
-NAVER_CLIENT_ID="your-naver-client-id"
-NAVER_CLIENT_SECRET="your-naver-client-secret"
+# TODO(kakao): 카카오 provider 활성화 시 사용
+# AUTH_KAKAO_ID="your-kakao-client-id"
+# AUTH_KAKAO_SECRET="your-kakao-client-secret"
+AUTH_NAVER_ID="your-naver-client-id"
+AUTH_NAVER_SECRET="your-naver-client-secret"
+
+# Email Magic Link (SMTP)
+EMAIL_SERVER="smtp://user:pass@smtp.example.com:587"
+EMAIL_FROM="우분투북스 <no-reply@example.com>"
 
 # Toss Payments
 TOSS_PAYMENTS_SECRET_KEY="test_sk_..."
