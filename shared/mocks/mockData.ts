@@ -1,6 +1,7 @@
 import { BoardSetting } from '@/domains/boards/types/board.types';
 import { Category } from '@/domains/categories/types/category.types';
 import { FileInfo } from '@/domains/files/types/file.types';
+import { Product, Theme } from '@/domains/products/types/product.types';
 
 // 중첩 카테고리 트리 Mock Data
 export const MOCK_CATEGORIES: Category[] = [
@@ -141,3 +142,220 @@ export const MOCK_FILES: FileInfo[] = [
         url: '/files/1',
     },
 ];
+
+// ─────────────────────────────────────────────
+// 우분투북스 테마 서가 / 도서 Mock Data
+// 백엔드 상품 목록·상세 API가 나오면 domains/products/api/productApi.ts 에서 교체
+// ─────────────────────────────────────────────
+// 탭에 이름만 보여주는 테마 목록 — 실제 책은 '도심 속 텃밭과 흙'(garden)만 있어요.
+export const MOCK_THEMES: Theme[] = [
+    {
+        id: 'garden',
+        name: '도심 속 텃밭과 흙',
+        short_name: '텃밭과 흙',
+        description:
+            '베란다 화분 하나, 동네 공동 텃밭 한 고랑에서 시작하는 이야기예요. 흙을 만지면 시간이 느리게 흐른다는 걸 알려주는 책들을 모았습니다.',
+        icon: 'sprout',
+        sort_order: 1,
+    },
+    {
+        id: 'table',
+        name: '치유의 식탁',
+        short_name: '치유의 식탁',
+        description: '',
+        icon: 'soup',
+        sort_order: 2,
+    },
+    {
+        id: 'nature',
+        name: '자연과 함께 머물기',
+        short_name: '자연과 머물기',
+        description: '',
+        icon: 'leaf',
+        sort_order: 3,
+    },
+    {
+        id: 'local',
+        name: '지역과 연대',
+        short_name: '지역과 연대',
+        description: '',
+        icon: 'map-pin',
+        sort_order: 4,
+    },
+];
+
+// 목록에 필요한 값만 적고, 상세 값은 아래 makeProduct 에서 기본값으로 채웁니다.
+type ProductSeed = Pick<
+    Product,
+    | 'id'
+    | 'theme_id'
+    | 'title'
+    | 'price'
+    | 'stock'
+    | 'one_line'
+    | 'cover_color'
+    | 'sort_order'
+> &
+    Partial<Product>;
+
+function makeProduct(seed: ProductSeed): Product {
+    return {
+        author: '○○○',
+        publisher: '○○출판',
+        curator_note: `${seed.one_line} 책방지기가 직접 읽고 고른 이유가 들어갈 자리예요.`,
+        pairing_note: null,
+        publisher_intro: '(출판사 제공 소개글이 들어갈 자리)',
+        published_at: '2025-03-10',
+        page_count: 216,
+        size: '130×200mm',
+        isbn: '979-11-00000-00-0',
+        cover_image_url: null,
+        ...seed,
+    };
+}
+
+export const MOCK_PRODUCTS: Product[] = (
+    [
+        // 도심 속 텃밭과 흙
+        {
+            id: 'b001',
+            theme_id: 'garden',
+            title: '베란다 정원 일기',
+            price: 16800,
+            stock: 4,
+            sort_order: 1,
+            cover_color: '#4b5a50',
+            cover_lines: ['베란다', '정원 일기'],
+            one_line: '화분 세 개로 시작해도 충분하다는 걸 알려준 책.',
+            curator_note:
+                '화분 세 개로 시작해도 충분하다는 걸 알려준 책이에요. 거창한 정원이 아니어도, 아침마다 잎을 들여다보는 시간이 하루를 얼마나 바꾸는지 조용히 보여줘요. 흙을 처음 만져보는 분께 가장 먼저 건네고 싶은 책입니다.',
+            pairing_note:
+                '어은동 로컬 허브티와 함께 읽으면, 베란다에 작은 허브 화분을 하나 들이고 싶어질 거예요.',
+            publisher_intro:
+                '도시의 좁은 베란다에서 일 년 동안 채소와 허브를 기르며 기록한 정원 일기. 씨앗을 고르는 법부터 흙을 섞는 법, 계절마다 달라지는 볕을 읽는 법까지, 처음 식물을 기르는 사람을 위한 다정한 안내서이자 느린 삶에 대한 에세이다. (출판사 제공 소개글이 들어갈 자리)',
+            published_at: '2025-04-20',
+            page_count: 232,
+        },
+        {
+            id: 'b002',
+            theme_id: 'garden',
+            title: '흙의 시간',
+            price: 18000,
+            stock: 6,
+            sort_order: 2,
+            cover_color: '#a87a4c',
+            cover_lines: ['흙의', '시간'],
+            one_line: '지렁이 이야기에 이렇게 마음이 놓일 줄이야.',
+        },
+        {
+            id: 'b003',
+            theme_id: 'garden',
+            title: '마을 텃밭 사계',
+            price: 15000,
+            stock: 0,
+            sort_order: 3,
+            cover_color: '#b3bcb0',
+            cover_lines: ['마을', '텃밭 사계'],
+            one_line: '이웃과 같이 심고 같이 거두는 일 년.',
+        },
+        {
+            id: 'b004',
+            theme_id: 'garden',
+            title: '씨앗 도서관',
+            price: 19500,
+            stock: 3,
+            sort_order: 4,
+            cover_color: '#b28b6e',
+            cover_lines: ['씨앗', '도서관'],
+            one_line: '토종 씨앗을 빌려주고 돌려받는 사람들.',
+        },
+        {
+            id: 'b005',
+            theme_id: 'garden',
+            title: '작은 땅의 야생',
+            price: 17000,
+            stock: 5,
+            sort_order: 5,
+            cover_color: '#8a4a2c',
+            cover_lines: ['작은 땅의', '야생'],
+            one_line: '잡초라 부르던 것들의 이름을 알게 됐어요.',
+        },
+        {
+            id: 'b006',
+            theme_id: 'garden',
+            title: '퇴비 만드는 법',
+            price: 14000,
+            stock: 8,
+            sort_order: 6,
+            cover_color: '#9c6a5c',
+            cover_lines: ['퇴비', '만드는 법'],
+            one_line: '부엌과 텃밭이 이어지는 순환의 책.',
+        },
+        {
+            id: 'b007',
+            theme_id: 'garden',
+            title: '도시 농부 일기',
+            price: 16000,
+            stock: 2,
+            sort_order: 7,
+            cover_color: '#3d4966',
+            cover_lines: ['도시', '농부 일기'],
+            one_line: '출근 전 한 시간, 텃밭에서 보내는 사람.',
+        },
+        {
+            id: 'b008',
+            theme_id: 'garden',
+            title: '흙 묻은 손',
+            price: 13500,
+            stock: 7,
+            sort_order: 8,
+            cover_color: '#6b6284',
+            cover_lines: ['흙 묻은', '손'],
+            one_line: '짧은 시와 사진으로 엮은 텃밭의 계절.',
+        },
+        {
+            id: 'b009',
+            theme_id: 'garden',
+            title: '옥상 꿀벌 학교',
+            price: 17800,
+            stock: 4,
+            sort_order: 9,
+            cover_color: '#9a685a',
+            cover_lines: ['옥상', '꿀벌 학교'],
+            one_line: '도시 한가운데서 벌을 치는 이웃들.',
+        },
+        {
+            id: 'b010',
+            theme_id: 'garden',
+            title: '빗물 정원',
+            price: 15500,
+            stock: 3,
+            sort_order: 10,
+            cover_color: '#5d7a74',
+            cover_lines: ['빗물', '정원'],
+            one_line: '비 오는 날이 기다려지는 작은 정원 설계.',
+        },
+        {
+            id: 'b011',
+            theme_id: 'garden',
+            title: '허브 한 줌',
+            price: 12800,
+            stock: 0,
+            sort_order: 11,
+            cover_color: '#7f8a55',
+            cover_lines: ['허브', '한 줌'],
+            one_line: '창가에서 키워 찻잔으로 옮기는 허브들.',
+        },
+        {
+            id: 'b012',
+            theme_id: 'garden',
+            title: '뿌리의 말',
+            price: 18500,
+            stock: 5,
+            sort_order: 12,
+            cover_color: '#6e5440',
+            cover_lines: ['뿌리의', '말'],
+            one_line: '보이지 않는 곳에서 일하는 것들에 대하여.',
+        },
+    ] satisfies ProductSeed[]
+).map(makeProduct);

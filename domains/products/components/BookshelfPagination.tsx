@@ -1,0 +1,68 @@
+import type { ProductListQuery } from '@/domains/products/types/product.types';
+import { buildBookshelfHref } from '@/domains/products/utils/bookshelfQuery';
+import { cn } from '@/shared/utils/cn';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+
+interface BookshelfPaginationProps {
+    query: ProductListQuery;
+    totalPages: number;
+}
+
+const itemClass = 'grid h-8 min-w-8 place-items-center rounded-lg text-ink-2';
+
+export default function BookshelfPagination({
+    query,
+    totalPages,
+}: BookshelfPaginationProps) {
+    const { page } = query;
+    const href = (p: number) => buildBookshelfHref({ ...query, page: p });
+
+    const renderArrow = (to: number, label: string, icon: React.ReactNode) =>
+        to < 1 || to > totalPages ? (
+            <span aria-hidden="true" className={cn(itemClass, 'opacity-30')}>
+                {icon}
+            </span>
+        ) : (
+            <Link
+                href={href(to)}
+                aria-label={label}
+                className={cn(itemClass, 'hover:bg-paper-2')}
+            >
+                {icon}
+            </Link>
+        );
+
+    return (
+        <nav
+            aria-label="페이지"
+            className="mt-16 flex justify-center gap-2 text-[14px]"
+        >
+            {renderArrow(
+                page - 1,
+                '이전 페이지',
+                <ChevronLeft className="h-3.5 w-3.5" />,
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <Link
+                    key={p}
+                    href={href(p)}
+                    aria-current={p === page ? 'page' : undefined}
+                    className={cn(
+                        itemClass,
+                        p === page
+                            ? 'bg-ink text-white'
+                            : 'hover:bg-paper-2',
+                    )}
+                >
+                    {p}
+                </Link>
+            ))}
+            {renderArrow(
+                page + 1,
+                '다음 페이지',
+                <ChevronRight className="h-3.5 w-3.5" />,
+            )}
+        </nav>
+    );
+}
