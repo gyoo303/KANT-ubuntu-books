@@ -12,7 +12,7 @@ export default function AboutQuote() {
                     <br className="max-sm:hidden" />
                     보내드리고 싶었어요.”
                 </blockquote>
-                <p className="text-muted mt-[26px] text-[10px]">
+                <p className="text-muted-foreground mt-[26px] text-[10px]">
                     — 우분투북스 책방지기
                 </p>
                 <div className="mt-[30px] flex flex-wrap justify-center gap-2">

@@ -17,7 +17,7 @@ export default function Header() {
                     className="flex shrink-0 items-baseline gap-2"
                 >
                     <span className="text-[17px] font-medium">우분투북스</span>
-                    <span className="text-muted text-[9px] tracking-[0.16em]">
+                    <span className="text-muted-foreground text-[9px] tracking-[0.16em]">
                         UBUNTU BOOKS
                     </span>
                 </Link>

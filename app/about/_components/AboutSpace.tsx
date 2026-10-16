@@ -40,7 +40,9 @@ export default function AboutSpace() {
                                 key={row.label}
                                 className="border-line grid grid-cols-[64px_1fr] border-b py-[9px] text-[11px]"
                             >
-                                <dt className="text-muted">{row.label}</dt>
+                                <dt className="text-muted-foreground">
+                                    {row.label}
+                                </dt>
                                 <dd className="text-ink">{row.value}</dd>
                             </div>
                         ))}

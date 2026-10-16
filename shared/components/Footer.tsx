@@ -61,7 +61,7 @@ export default function Footer() {
                 </div>
 
                 {/* 하단 사업자 정보 */}
-                <div className="text-muted flex flex-col justify-between gap-6 pt-5 text-[11px] md:flex-row">
+                <div className="text-muted-foreground flex flex-col justify-between gap-6 pt-5 text-[11px] md:flex-row">
                     <p>
                         상호 우분투북스 · 대표 ○○○ · 사업자등록번호 000-00-00000
                         · 통신판매업 신고 0000-대전유성-0000

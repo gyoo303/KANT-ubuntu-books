@@ -10,7 +10,7 @@ export default function AboutHero() {
                     <br />
                     내가 있다
                 </h1>
-                <p className="text-muted mt-[18px] text-[11px] tracking-[0.06em]">
+                <p className="text-muted-foreground mt-[18px] text-[11px] tracking-[0.06em]">
                     UBUNTU · Umuntu ngumuntu ngabantu
                 </p>
                 <p className="text-ink-2 mt-[30px] text-[13px] leading-[1.85]">

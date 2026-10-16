@@ -22,7 +22,11 @@
     --color-line: #e4dac9; /* 구분선·테두리 */
     --color-ink: #2a241f; /* 본문 텍스트 */
     --color-ink-2: #5d5349; /* 보조 텍스트 */
-    --color-muted: #958a7e; /* 흐린 텍스트·캡션 */
+    /*
+     * 가이드의 Muted(#958a7e, 흐린 텍스트·캡션)는 shadcn 의 muted(연한 배경)와 이름이 겹친다.
+     * shadcn 규칙을 따라 text-muted-foreground 로 쓰고, bg-muted 는 paper-2 를 가리킨다.
+     */
+    --color-muted-foreground: #958a7e;
 
     --color-olive: #656839; /* Accent: 주요 버튼 */
     --color-olive-soft: #e9ead6;
@@ -48,6 +52,29 @@
     --breakpoint-lg: 64rem;
 
     --container-page: 70rem; /* 1120px */
+}
+
+/*
+ * DEPRECATED: 이전 색 이름 → 가이드 이름 임시 별칭
+ * 진행 중인 브랜치(feat/auth, feature/mypage 등)가 이전 이름을 쓰고 있어 남겨 둔다.
+ * 새 코드에서는 쓰지 말 것.
+ * TODO: 해당 브랜치가 모두 가이드 이름으로 바꾸고 머지되면 이 블록을 삭제한다.
+ *   cream → paper, cream-deep → paper-2, ink-sub → ink-2, ink-muted → muted-foreground,
+ *   line-strong → ink-2, olive-dark → olive/90, olive-tint → olive-soft,
+ *   footer → ink, footer-text → line, footer-muted → muted-foreground, footer-line → white/10
+ */
+@theme inline {
+    --color-cream: var(--color-paper);
+    --color-cream-deep: var(--color-paper-2);
+    --color-ink-sub: var(--color-ink-2);
+    --color-ink-muted: var(--color-muted-foreground);
+    --color-line-strong: var(--color-ink-2);
+    --color-olive-dark: color-mix(in oklab, var(--color-olive) 85%, black);
+    --color-olive-tint: var(--color-olive-soft);
+    --color-footer: var(--color-ink);
+    --color-footer-text: var(--color-line);
+    --color-footer-muted: var(--color-muted-foreground);
+    --color-footer-line: color-mix(in oklab, var(--color-ink) 88%, white);
 }
 
 /*
@@ -142,7 +169,7 @@
     --color-destructive: var(--destructive);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
     --color-secondary-foreground: var(--secondary-foreground);
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
@@ -170,7 +197,8 @@
     --primary-foreground: var(--color-card);
     --secondary: var(--color-paper-2);
     --secondary-foreground: var(--color-ink);
-    --muted-foreground: var(--color-muted);
+    --muted: var(--color-paper-2);
+    --muted-foreground: var(--color-muted-foreground);
     --accent: var(--color-olive-soft);
     --accent-foreground: var(--color-ink);
     --destructive: var(--color-post);
