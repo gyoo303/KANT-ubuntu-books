@@ -10,10 +10,10 @@ export default function AboutHero() {
                     <br />
                     내가 있다
                 </h1>
-                <p className="text-ink-muted mt-[18px] text-[11px] tracking-[0.06em]">
+                <p className="text-muted mt-[18px] text-[11px] tracking-[0.06em]">
                     UBUNTU · Umuntu ngumuntu ngabantu
                 </p>
-                <p className="text-ink-sub mt-[30px] text-[13px] leading-[1.85]">
+                <p className="text-ink-2 mt-[30px] text-[13px] leading-[1.85]">
                     남아프리카의 오래된 말, 우분투. 사람은 다른 사람을 통해
                     비로소 사람이 된다는 뜻이에요.
                     <br className="max-sm:hidden" />책 한 권이 한 사람에게 닿는

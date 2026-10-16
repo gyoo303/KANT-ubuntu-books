@@ -19,7 +19,7 @@ export function NavLinks({ pathname }: { pathname: string | null }) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                        'text-ink-sub hover:text-ink text-[13px] transition-colors',
+                        'text-ink-2 hover:text-ink text-[13px] transition-colors',
                         isActive(pathname, item.href) && 'text-ink font-bold',
                     )}
                 >

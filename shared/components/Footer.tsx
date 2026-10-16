@@ -16,10 +16,10 @@ const NEWS_LINKS = [
 
 export default function Footer() {
     return (
-        <footer className="bg-footer text-footer-text mt-auto w-full pt-14 pb-7 text-xs leading-[1.8]">
+        <footer className="bg-ink text-line mt-auto w-full pt-14 pb-7 text-xs leading-[1.8]">
             <div className="max-w-page mx-auto w-full px-6">
                 {/* 메인 정보: 모바일 세로 -> md 이상 좌우 배치 */}
-                <div className="border-footer-line flex flex-col justify-between gap-10 border-b pb-8 md:flex-row">
+                <div className="flex flex-col justify-between gap-10 border-b border-white/10 pb-8 md:flex-row">
                     <div>
                         <p className="mb-[18px] text-[17px] font-medium text-white">
                             우분투북스
@@ -61,7 +61,7 @@ export default function Footer() {
                 </div>
 
                 {/* 하단 사업자 정보 */}
-                <div className="text-footer-muted flex flex-col justify-between gap-6 pt-5 text-[11px] md:flex-row">
+                <div className="text-muted flex flex-col justify-between gap-6 pt-5 text-[11px] md:flex-row">
                     <p>
                         상호 우분투북스 · 대표 ○○○ · 사업자등록번호 000-00-00000
                         · 통신판매업 신고 0000-대전유성-0000
@@ -69,14 +69,14 @@ export default function Footer() {
                     <p className="shrink-0">
                         <Link
                             href="#"
-                            className="hover:text-footer-text transition-colors"
+                            className="hover:text-line transition-colors"
                         >
                             이용약관
                         </Link>
                         {' · '}
                         <Link
                             href="#"
-                            className="hover:text-footer-text transition-colors"
+                            className="hover:text-line transition-colors"
                         >
                             개인정보처리방침
                         </Link>

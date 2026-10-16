@@ -22,7 +22,7 @@ export default function AboutSpace() {
                     </SectionHeading>
                 </div>
 
-                <div className="text-ink-sub text-xs leading-[1.95]">
+                <div className="text-ink-2 text-xs leading-[1.95]">
                     <p>
                         대학가와 오래된 주택이 섞인 어은동 골목에 작은 책방을
                         열었어요. 커다란 창 앞에 앉아 책을 고르고, 저녁이면
@@ -40,7 +40,7 @@ export default function AboutSpace() {
                                 key={row.label}
                                 className="border-line grid grid-cols-[64px_1fr] border-b py-[9px] text-[11px]"
                             >
-                                <dt className="text-ink-muted">{row.label}</dt>
+                                <dt className="text-muted">{row.label}</dt>
                                 <dd className="text-ink">{row.value}</dd>
                             </div>
                         ))}
