@@ -20,14 +20,14 @@ export default function PaymentFailPage({
     searchParams: SearchParams;
 }) {
     return (
-        <div className="bg-[#f5f1ea] text-[#2b2620]">
+        <div className="bg-paper text-ink">
             <div className="mx-auto max-w-[560px] px-4 py-24 text-center">
                 <Suspense fallback={null}>
                     <FailReason searchParams={searchParams} />
                 </Suspense>
                 <Link
                     href="/cart"
-                    className="mt-10 inline-block rounded-full bg-[#636b3a] px-8 py-4 font-semibold text-white"
+                    className="bg-olive mt-10 inline-block rounded-full px-8 py-4 font-semibold text-white"
                 >
                     장바구니로 돌아가기
                 </Link>
@@ -49,8 +49,8 @@ async function FailReason({ searchParams }: { searchParams: SearchParams }) {
             {/* 취소가 아닌 진짜 실패일 때만 이유와 코드를 보여준다 */}
             {!canceled && (
                 <>
-                    <p className="mt-4 text-[#5c554b]">{message}</p>
-                    <p className="mt-2 text-sm text-[#8a8278]">{code}</p>
+                    <p className="text-ink-2 mt-4">{message}</p>
+                    <p className="text-muted-foreground mt-2 text-sm">{code}</p>
                 </>
             )}
         </>

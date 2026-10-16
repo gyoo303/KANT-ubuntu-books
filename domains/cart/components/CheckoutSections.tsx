@@ -52,9 +52,9 @@ export default function CheckoutSections({
     return (
         <div className="mt-10 space-y-6">
             {/* ── 배송지 ── */}
-            <section className="rounded-2xl border border-[#e6dfd3] bg-[#fffdf8] p-8 md:p-10">
+            <section className="rounded-2xl border border-line bg-card p-8 md:p-10">
                 <h2 className="text-2xl font-medium">배송지</h2>
-                <p className="mt-2 text-sm text-[#5c554b]">
+                <p className="mt-2 text-sm text-ink-2">
                     상자를 받으실 분의 정보를 확인해 주세요. 연락처는 배송
                     안내에만 써요.
                 </p>
@@ -74,8 +74,8 @@ export default function CheckoutSections({
                                 className={cn(
                                     'rounded-full border px-4 py-2 text-sm disabled:opacity-40',
                                     tab === item.value
-                                        ? 'border-[#2b2620] bg-[#2b2620] text-white'
-                                        : 'border-[#c9bfae]',
+                                        ? 'border-ink bg-ink text-white'
+                                        : 'border-ink-2/30',
                                 )}
                             >
                                 {item.label}
@@ -84,7 +84,7 @@ export default function CheckoutSections({
                     })}
                 </div>
                 {!savedDefault && (
-                    <p className="mt-3 text-xs text-[#8a8278]">
+                    <p className="mt-3 text-xs text-muted-foreground">
                         저장된 기본 배송지가 없어요. 새 배송지로 주문하면 다음에
                         불러올 수 있어요.
                     </p>
@@ -125,7 +125,7 @@ export default function CheckoutSections({
                             }
                         />
                         {!readOnly && (
-                            <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-[#5c554b]">
+                            <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-ink-2">
                                 <input
                                     type="checkbox"
                                     checked={contact.saveAsMyPhone}
@@ -134,7 +134,7 @@ export default function CheckoutSections({
                                             e.target.checked,
                                         )
                                     }
-                                    className="size-4 accent-[#636b3a]"
+                                    className="size-4 accent-olive"
                                 />
                                 이 번호를 내 연락처로 저장
                             </label>
@@ -154,9 +154,9 @@ export default function CheckoutSections({
             </section>
 
             {/* ── 결제 수단 ── */}
-            <section className="rounded-2xl border border-[#e6dfd3] bg-[#fffdf8] p-8 md:p-10">
+            <section className="rounded-2xl border border-line bg-card p-8 md:p-10">
                 <h2 className="text-2xl font-medium">결제 수단</h2>
-                <p className="mt-2 text-sm text-[#5c554b]">
+                <p className="mt-2 text-sm text-ink-2">
                     토스페이먼츠로 안전하게 결제돼요.
                 </p>
                 {/* 선택된 버튼은 초록 테두리 + 굵은 글씨 */}
@@ -170,8 +170,8 @@ export default function CheckoutSections({
                             className={cn(
                                 'h-16 rounded-lg border text-sm',
                                 payment === method.value
-                                    ? 'border-2 border-[#636b3a] font-semibold'
-                                    : 'border-[#c9bfae]',
+                                    ? 'border-olive border-2 font-semibold'
+                                    : 'border-ink-2/30',
                             )}
                         >
                             {method.label}
@@ -211,10 +211,10 @@ function Field({
                 placeholder={placeholder}
                 aria-invalid={error ? true : undefined}
                 onChange={(e) => onChange(e.target.value)}
-                className="mt-2 h-12 w-full rounded-lg border border-[#c9bfae] bg-white px-4 text-base read-only:bg-[#faf7f1] aria-invalid:border-[#c0563a]"
+                className="mt-2 h-12 w-full rounded-lg border border-ink-2/30 bg-card read-only:bg-paper px-4 text-base aria-invalid:border-post"
             />
             {error && (
-                <span className="mt-1.5 block text-xs text-[#c0563a]">
+                <span className="mt-1.5 block text-xs text-post">
                     {error}
                 </span>
             )}

@@ -28,7 +28,7 @@ export default function AboutGallery() {
                         <figure
                             key={item.id}
                             className={cn(
-                                'bg-stripes relative overflow-hidden rounded-md border border-[#e3d8c4]',
+                                'bg-stripes border-line relative overflow-hidden rounded-md border',
                                 AREA_CLASS[item.id],
                             )}
                         >

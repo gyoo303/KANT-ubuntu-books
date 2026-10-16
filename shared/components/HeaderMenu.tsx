@@ -23,7 +23,7 @@ export default function HeaderMenu() {
                 aria-expanded={open}
                 aria-controls="header-menu"
                 onClick={() => setOpen((v) => !v)}
-                className="text-ink-sub hover:text-ink inline-flex p-1 transition-colors"
+                className="text-ink-2 hover:text-ink inline-flex p-1 transition-colors"
             >
                 <Icon className="size-[18px]" strokeWidth={1.6} />
             </button>
@@ -31,7 +31,7 @@ export default function HeaderMenu() {
             {open && (
                 <div
                     id="header-menu"
-                    className="border-line bg-cream absolute inset-x-0 top-full border-y pt-3 pb-5"
+                    className="border-line bg-paper absolute inset-x-0 top-full border-y pt-3 pb-5"
                 >
                     <div className="max-w-page mx-auto flex w-full flex-col px-6">
                         {NAV_ITEMS.map((item) => (
@@ -48,7 +48,7 @@ export default function HeaderMenu() {
                         <Link
                             href="/subscription"
                             onClick={close}
-                            className="bg-olive hover:bg-olive-dark mt-4 inline-flex h-11 items-center justify-center rounded-full px-6.5 text-sm font-bold text-white transition-colors"
+                            className="bg-olive hover:bg-olive/90 mt-4 inline-flex h-11 items-center justify-center rounded-full px-6.5 text-sm font-bold text-white transition-colors"
                         >
                             편지로 구독하기
                         </Link>

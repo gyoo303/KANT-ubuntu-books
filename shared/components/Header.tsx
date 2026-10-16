@@ -10,7 +10,7 @@ const CART_COUNT = 2;
 
 export default function Header() {
     return (
-        <header className="border-line bg-cream/95 sticky top-0 z-50 w-full border-b backdrop-blur-sm">
+        <header className="border-line bg-paper/95 sticky top-0 z-50 w-full border-b backdrop-blur-sm">
             <div className="max-w-page mx-auto flex h-16 w-full items-center gap-12 px-6">
                 {/* 로고 영역 */}
                 <Link
@@ -18,7 +18,7 @@ export default function Header() {
                     className="flex shrink-0 items-baseline gap-2"
                 >
                     <span className="text-[17px] font-medium">우분투북스</span>
-                    <span className="text-ink-muted text-[9px] tracking-[0.16em]">
+                    <span className="text-muted-foreground text-[9px] tracking-[0.16em]">
                         UBUNTU BOOKS
                     </span>
                 </Link>

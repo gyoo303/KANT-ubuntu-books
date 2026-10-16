@@ -2,18 +2,16 @@ export default function AboutHero() {
     return (
         <section className="pt-18 pb-16 text-center">
             <div className="max-w-page mx-auto w-full px-6">
-                <p className="text-olive text-[11px] font-medium tracking-[0.08em]">
-                    BRAND STORY · /about
-                </p>
-                <h1 className="mt-3.5 text-[clamp(40px,6vw,52px)] leading-[1.22] font-normal tracking-[-0.02em]">
+                <p className="typo-eyebrow text-olive">BRAND STORY · /about</p>
+                <h1 className="typo-display mt-3.5">
                     네가 있어
                     <br />
                     내가 있다
                 </h1>
-                <p className="text-ink-muted mt-[18px] text-[11px] tracking-[0.06em]">
+                <p className="text-muted-foreground mt-[18px] text-[11px] tracking-[0.06em]">
                     UBUNTU · Umuntu ngumuntu ngabantu
                 </p>
-                <p className="text-ink-sub mt-[30px] text-[13px] leading-[1.85]">
+                <p className="text-ink-2 mt-[30px] text-[13px] leading-[1.85]">
                     남아프리카의 오래된 말, 우분투. 사람은 다른 사람을 통해
                     비로소 사람이 된다는 뜻이에요.
                     <br className="max-sm:hidden" />책 한 권이 한 사람에게 닿는
