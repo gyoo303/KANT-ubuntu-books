@@ -50,6 +50,79 @@
     --container-page: 70rem; /* 1120px */
 }
 
+/*
+ * 폰트 (스타일 가이드 Typography)
+ * 본문은 명조, 인터페이스는 고딕, 손편지는 손글씨체를 쓴다.
+ * --font-noto-sans-kr 등 next/font 변수는 app/layout.tsx 에서 <html> 에 주입된다.
+ */
+@theme inline {
+    --font-sans: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;
+    --font-serif: var(--font-ridi-batang), 'AppleMyungjo', serif;
+    --font-hand: var(--font-nanum-pen-script), cursive;
+    --font-heading: var(--font-ridi-batang), 'AppleMyungjo', serif;
+}
+
+/*
+ * 텍스트 스타일 (typo-*) — 폰트·크기·행간을 한 번에 지정
+ * 굵기·색은 필요한 곳에서 font-*, text-* 로 덧붙인다.
+ * TODO(responsive): H2(32–36), H3(20–22), Caption(13/12) 은 현재 데스크톱 값만 적용.
+ *   모바일·태블릿 작업 시 작은 화면 크기를 추가한다. Display·H1 도 모바일 축소 필요.
+ */
+@utility typo-display {
+    font-family: var(--font-serif);
+    font-size: 3.4375rem; /* 55px */
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+@utility typo-h1 {
+    font-family: var(--font-serif);
+    font-size: 2.625rem; /* 42px */
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+@utility typo-h2 {
+    font-family: var(--font-serif);
+    font-size: 2.25rem; /* 36px (모바일 32px) */
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+}
+@utility typo-h3 {
+    font-family: var(--font-serif);
+    font-size: 1.375rem; /* 22px (모바일 20px) */
+    line-height: 1.45;
+}
+/* 줄노트 편지지: 행간 40px 에 맞춰 밑줄 배경을 깐다 */
+@utility typo-letter {
+    font-family: var(--font-serif);
+    font-size: 1.0625rem; /* 17px */
+    line-height: 2.5rem; /* 40px */
+}
+@utility typo-body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem; /* 15px */
+    font-weight: 400;
+    line-height: 1.7;
+}
+@utility typo-caption {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem; /* 13px (모바일 12px) */
+    font-weight: 400;
+    line-height: 1.5;
+}
+@utility typo-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem; /* 13px */
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+@utility typo-hand {
+    font-family: var(--font-hand);
+    font-size: 1.5625rem; /* 25px */
+    line-height: 1.4;
+}
+
 /* 사진이 들어오기 전 이미지 자리 표시용 사선 패턴 */
 @utility bg-stripes {
     background-image: repeating-linear-gradient(
@@ -63,9 +136,6 @@
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
-    --font-sans: var(--font-sans);
-    --font-mono: var(--font-geist-mono);
-    --font-heading: var(--font-sans);
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
