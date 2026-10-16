@@ -26,14 +26,14 @@ export default async function BookshelfPage({
     return (
         <BookshelfShell>
             {/* 페이지 머리말 */}
-            <section className="border-ub-line border-b pt-14 pb-7 md:pt-[78px]">
-                <p className="text-ub-sub text-[15px] font-medium tracking-[0.08em]">
+            <section className="border-line border-b pt-14 pb-7 md:pt-[78px]">
+                <p className="text-ink-2 text-[15px] font-medium tracking-[0.08em]">
                     CURATED SHELVES · /bookshelf
                 </p>
                 <h1 className="mt-3 text-[32px] leading-tight font-medium md:text-[40px]">
                     테마 서가
                 </h1>
-                <p className="text-ub-sub mt-3 text-[15px]">
+                <p className="text-ink-2 mt-3 text-[15px]">
                     장르 대신 마음이 머무는 곳으로 책을 나눴어요.
                 </p>
                 <ThemeTabs themes={themes} activeThemeId={theme.id} />
@@ -45,15 +45,15 @@ export default async function BookshelfPage({
                     <h2 className="text-[28px] font-medium">
                         {theme.name}
                     </h2>
-                    <p className="text-ub-sub mt-4 max-w-[680px] text-[14.5px] leading-[2]">
+                    <p className="text-ink-2 mt-4 max-w-[680px] text-[14.5px] leading-[2]">
                         {theme.description}
                     </p>
-                    <span className="bg-ub-card text-ub-sub mt-4 inline-block rounded-md px-2.5 py-1 font-mono text-[12px]">
+                    <span className="bg-paper-2 text-ink-2 mt-4 inline-block rounded-md px-2.5 py-1 font-mono text-[12px]">
                         /bookshelf?theme={theme.id}
                     </span>
                 </div>
                 {/* TODO: 테마 대표 이미지 */}
-                <div className="border-ub-line text-ub-sub grid aspect-[360/200] place-items-center rounded-2xl border bg-[repeating-linear-gradient(-45deg,#e8dcc6_0_20px,#f3ebdd_20px_40px)] text-[13px]">
+                <div className="border-line text-ink-2 grid aspect-[360/200] place-items-center rounded-2xl border bg-stripes text-[13px]">
                     테마 대표 이미지 ({theme.short_name})
                 </div>
             </section>
@@ -73,7 +73,7 @@ export default async function BookshelfPage({
                         ))}
                     </ul>
                 ) : (
-                    <p className="text-ub-sub py-20 text-center text-sm">
+                    <p className="text-ink-2 py-20 text-center text-sm">
                         조건에 맞는 책이 없어요.
                     </p>
                 )}

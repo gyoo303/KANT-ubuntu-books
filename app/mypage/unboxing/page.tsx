@@ -31,14 +31,14 @@ export default async function UnboxingPage() {
 
     return (
         <>
-            <h1 className="font-ub-serif text-[30px] md:text-[34px]">
+            <h1 className="font-serif text-[30px] md:text-[34px]">
                 {unboxing.month_label}의 답장
             </h1>
-            <p className="text-ub-sub mt-3 text-[15px]">
+            <p className="text-ink-2 mt-3 text-[15px]">
                 상자를 열어주셔서 고마워요. 이제 모든 이야기를 들려드릴게요.
             </p>
 
-            <p className="text-ub-sub mt-10 flex h-[55px] items-center gap-3 rounded-[10px] bg-[#e1e7dd] px-8 text-[14px]">
+            <p className="text-ink-2 mt-10 flex h-[55px] items-center gap-3 rounded-[10px] bg-sage/15 px-8 text-[14px]">
                 <LockOpen className="size-[18px]" strokeWidth={1.6} />
                 봉인이 풀렸어요 · {formatUnlockedAt(unboxing.unlocked_at)}
             </p>
@@ -51,26 +51,26 @@ export default async function UnboxingPage() {
                         size="lg"
                         className="mx-auto w-full max-w-[260px]"
                     />
-                    <h2 className="font-ub-serif mt-8 text-[26px]">
+                    <h2 className="font-serif mt-8 text-[26px]">
                         {book.title}
                     </h2>
-                    <p className="text-ub-muted mt-1.5 text-[14px]">
+                    <p className="text-muted-foreground mt-1.5 text-[14px]">
                         {book.author} 지음 · {book.publisher} ·{' '}
                         {book.published_year}
                     </p>
-                    <div className="border-ub-line my-6 border-t" />
-                    <p className="text-ub-olive text-[13px] font-bold">
+                    <div className="border-line my-6 border-t" />
+                    <p className="text-olive text-[13px] font-bold">
                         책방지기가 고른 이유
                     </p>
-                    <p className="text-ub-sub mt-3 text-[14px] leading-[26px]">
+                    <p className="text-ink-2 mt-3 text-[14px] leading-[26px]">
                         {unboxing.curator_reason}
                     </p>
-                    <div className="mt-9 rounded-2xl bg-[#e1e7dd] px-[22px] py-6">
-                        <p className="font-ub-serif flex items-center gap-1.5 text-[16px]">
+                    <div className="mt-9 rounded-2xl bg-sage/15 px-[22px] py-6">
+                        <p className="font-serif flex items-center gap-1.5 text-[16px]">
                             <Leaf className="size-4" strokeWidth={1.6} />
                             {unboxing.pairing.title}
                         </p>
-                        <p className="text-ub-sub mt-2.5 text-[13.5px] leading-[24px]">
+                        <p className="text-ink-2 mt-2.5 text-[13.5px] leading-[24px]">
                             {unboxing.pairing.body}
                         </p>
                     </div>
@@ -85,7 +85,7 @@ export default async function UnboxingPage() {
                     {/* 이미 남긴 메모가 있는지는 요청 시점에 읽어요 */}
                     <Suspense
                         fallback={
-                            <div className="bg-ub-card mt-8 h-[257px] animate-pulse rounded-[20px]" />
+                            <div className="bg-paper-2 mt-8 h-[257px] animate-pulse rounded-[20px]" />
                         }
                     >
                         <BookmarkSection entryId={unboxing.entry_id} />

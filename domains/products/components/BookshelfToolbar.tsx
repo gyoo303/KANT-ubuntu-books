@@ -36,7 +36,7 @@ export default function BookshelfToolbar({
         });
 
     return (
-        <div className="text-ub-sub mb-7 flex items-center justify-between text-[14px]">
+        <div className="text-ink-2 mb-7 flex items-center justify-between text-[14px]">
             <span>{totalCount}권</span>
             <div className="flex items-center gap-4">
                 <label className="inline-flex cursor-pointer items-center gap-2">
@@ -46,7 +46,7 @@ export default function BookshelfToolbar({
                         onChange={(e) =>
                             update({ hideSoldOut: e.target.checked })
                         }
-                        className="accent-ub-olive size-[18px]"
+                        className="accent-olive size-[18px]"
                     />
                     품절 제외
                 </label>
@@ -57,7 +57,7 @@ export default function BookshelfToolbar({
                         onChange={(e) =>
                             update({ sort: e.target.value as ProductSort })
                         }
-                        className="text-ub-ink cursor-pointer appearance-none bg-transparent pr-5 outline-none"
+                        className="text-ink cursor-pointer appearance-none bg-transparent pr-5 outline-none"
                     >
                         {PRODUCT_SORT_OPTIONS.map((o) => (
                             <option key={o.value} value={o.value}>
@@ -67,7 +67,7 @@ export default function BookshelfToolbar({
                     </select>
                     <ChevronDown
                         aria-hidden="true"
-                        className="text-ub-ink pointer-events-none absolute top-1/2 right-0 size-3.5 -translate-y-1/2"
+                        className="text-ink pointer-events-none absolute top-1/2 right-0 size-3.5 -translate-y-1/2"
                     />
                 </div>
             </div>

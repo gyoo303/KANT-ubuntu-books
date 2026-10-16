@@ -64,9 +64,9 @@ async function ProductDetail({ params }: { params: Params }) {
         <>
             <nav
                 aria-label="현재 위치"
-                className="text-ub-sub pt-7 pb-5 text-[11px]"
+                className="text-ink-2 pt-7 pb-5 text-[11px]"
             >
-                <Link href="/bookshelf" className="hover:text-ub-ink hover:underline">
+                <Link href="/bookshelf" className="hover:text-ink hover:underline">
                     테마 서가
                 </Link>
                 {theme && (
@@ -74,7 +74,7 @@ async function ProductDetail({ params }: { params: Params }) {
                         {' / '}
                         <Link
                             href="/bookshelf"
-                            className="hover:text-ub-ink hover:underline"
+                            className="hover:text-ink hover:underline"
                         >
                             {theme.name}
                         </Link>
@@ -91,7 +91,7 @@ async function ProductDetail({ params }: { params: Params }) {
                     {theme && (
                         <Link
                             href="/bookshelf"
-                            className="bg-ub-olive-soft text-ub-olive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px]"
+                            className="bg-olive-soft text-olive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px]"
                         >
                             <ThemeIcon name={theme.icon} className="h-3 w-3" />
                             {theme.name}
@@ -100,30 +100,30 @@ async function ProductDetail({ params }: { params: Params }) {
                     <h1 className="mt-2.5 mb-1 text-[26px] font-medium md:text-[34px]">
                         {product.title}
                     </h1>
-                    <p className="text-ub-muted text-xs">
+                    <p className="text-muted-foreground text-xs">
                         {product.author} 지음 · {product.publisher} ·{' '}
                         {publishedAt.slice(0, 4)} · {product.page_count}쪽
                     </p>
 
                     {/* 책방지기 노트 */}
-                    <div className="border-ub-line bg-ub-cream my-6 rounded-xl border px-6 py-6 md:px-[30px]">
-                        <p className="font-ub-serif text-ub-olive flex items-center gap-2 text-[11px]">
-                            <span className="bg-ub-olive-soft grid h-6 w-6 place-items-center rounded-full font-semibold">
+                    <div className="border-line bg-letter my-6 rounded-xl border px-6 py-6 md:px-[30px]">
+                        <p className="font-serif text-olive flex items-center gap-2 text-[11px]">
+                            <span className="bg-olive-soft grid h-6 w-6 place-items-center rounded-full font-semibold">
                                 책
                             </span>
                             책방지기 노트 · Curator&apos;s Voice
                         </p>
-                        <p className="font-ub-serif mt-3.5 text-[15px] leading-[1.95] md:text-base">
+                        <p className="font-serif mt-3.5 text-[15px] leading-[1.95] md:text-base">
                             {product.curator_note}
                         </p>
                         {product.pairing_note && (
-                            <p className="border-ub-border text-ub-sub mt-4 flex gap-2 border-t border-dashed pt-4 text-xs">
+                            <p className="border-line text-ink-2 mt-4 flex gap-2 border-t border-dashed pt-4 text-xs">
                                 <Leaf
                                     className="mt-0.5 h-3 w-3 shrink-0"
                                     aria-hidden="true"
                                 />
                                 <span>
-                                    <strong className="text-ub-ink">
+                                    <strong className="text-ink">
                                         페어링
                                     </strong>{' '}
                                     · {product.pairing_note}
@@ -140,24 +140,24 @@ async function ProductDetail({ params }: { params: Params }) {
                 title="출판사 책 소개"
                 className="mt-16 md:mt-[70px]"
             >
-                <p className="text-ub-sub max-w-[660px] text-[13px] leading-loose">
+                <p className="text-ink-2 max-w-[660px] text-[13px] leading-loose">
                     {product.publisher_intro}
                 </p>
             </DetailSection>
 
             <DetailSection title="책 정보">
                 <dl className="grid grid-cols-[105px_1fr] gap-y-3 text-[12.5px]">
-                    <dt className="text-ub-muted">저자</dt>
+                    <dt className="text-muted-foreground">저자</dt>
                     <dd>{product.author}</dd>
-                    <dt className="text-ub-muted">출판사</dt>
+                    <dt className="text-muted-foreground">출판사</dt>
                     <dd>{product.publisher}</dd>
-                    <dt className="text-ub-muted">출간일</dt>
+                    <dt className="text-muted-foreground">출간일</dt>
                     <dd>{publishedAt}</dd>
-                    <dt className="text-ub-muted">쪽수 · 판형</dt>
+                    <dt className="text-muted-foreground">쪽수 · 판형</dt>
                     <dd>
                         {product.page_count}쪽 · {product.size}
                     </dd>
-                    <dt className="text-ub-muted">ISBN</dt>
+                    <dt className="text-muted-foreground">ISBN</dt>
                     <dd>{product.isbn}</dd>
                 </dl>
             </DetailSection>
@@ -168,7 +168,7 @@ async function ProductDetail({ params }: { params: Params }) {
                         {related.map((r) => (
                             <li key={r.id}>
                                 <Link href={`/bookshelf/${r.id}`} className="group block">
-                                    <div className="bg-ub-card group-hover:bg-ub-card-hover grid place-items-center rounded-lg py-4 transition-colors">
+                                    <div className="bg-paper-2 group-hover:bg-line grid place-items-center rounded-lg py-4 transition-colors">
                                         <BookCover
                                             product={r}
                                             size="sm"
@@ -178,7 +178,7 @@ async function ProductDetail({ params }: { params: Params }) {
                                     <p className="mt-3 text-[13px]">
                                         {r.title}
                                     </p>
-                                    <p className="text-ub-muted text-[11px]">
+                                    <p className="text-muted-foreground text-[11px]">
                                         {formatPrice(r.price)}
                                     </p>
                                 </Link>
@@ -202,7 +202,7 @@ function DetailSection({
 }) {
     return (
         <section
-            className={`border-ub-line grid gap-5 border-t py-10 md:grid-cols-[250px_1fr] md:gap-0 md:py-14 ${className}`}
+            className={`border-line grid gap-5 border-t py-10 md:grid-cols-[250px_1fr] md:gap-0 md:py-14 ${className}`}
         >
             <h2 className="text-[19px] font-medium">{title}</h2>
             <div>{children}</div>
@@ -214,12 +214,12 @@ function ProductDetailSkeleton() {
     return (
         <div aria-hidden="true" className="animate-pulse pt-16">
             <div className="grid gap-7 md:grid-cols-2 md:gap-14">
-                <div className="bg-ub-card aspect-[454/530] rounded-xl" />
+                <div className="bg-paper-2 aspect-[454/530] rounded-xl" />
                 <div className="space-y-4">
-                    <div className="bg-ub-card h-5 w-28 rounded-full" />
-                    <div className="bg-ub-card h-10 w-2/3 rounded" />
-                    <div className="bg-ub-card h-56 rounded-xl" />
-                    <div className="bg-ub-card h-32 rounded-xl" />
+                    <div className="bg-paper-2 h-5 w-28 rounded-full" />
+                    <div className="bg-paper-2 h-10 w-2/3 rounded" />
+                    <div className="bg-paper-2 h-56 rounded-xl" />
+                    <div className="bg-paper-2 h-32 rounded-xl" />
                 </div>
             </div>
         </div>

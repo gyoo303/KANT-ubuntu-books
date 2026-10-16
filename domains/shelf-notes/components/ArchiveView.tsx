@@ -37,7 +37,7 @@ export default function ArchiveView({
     return (
         <>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                <p className="text-ub-sub text-[15px]">
+                <p className="text-ink-2 text-[15px]">
                     받은 책과 책방지기의 쪽지, 내가 남긴 한 줄이 계절마다
                     쌓여요.
                 </p>
@@ -52,8 +52,8 @@ export default function ArchiveView({
                             className={cn(
                                 'h-[30px] rounded-full border px-3.5 text-[12.5px] transition-colors',
                                 y === year
-                                    ? 'border-ub-ink bg-ub-ink font-bold text-white'
-                                    : 'border-ub-border text-ub-sub hover:border-ub-olive',
+                                    ? 'border-ink bg-ink font-bold text-white'
+                                    : 'border-line text-ink-2 hover:border-olive',
                             )}
                         >
                             {y}
@@ -66,9 +66,9 @@ export default function ArchiveView({
                 {stats.map((s) => (
                     <div
                         key={s.label}
-                        className="bg-ub-card rounded-xl px-4 py-5 md:px-6 md:py-[26px]"
+                        className="bg-paper-2 rounded-xl px-4 py-5 md:px-6 md:py-[26px]"
                     >
-                        <p className="text-ub-sub text-[13px]">{s.label}</p>
+                        <p className="text-ink-2 text-[13px]">{s.label}</p>
                         <p className="mt-2 text-[22px] md:text-[28px]">
                             {s.value}
                         </p>
@@ -87,12 +87,12 @@ export default function ArchiveView({
                     ))}
                 </div>
             ) : (
-                <p className="text-ub-sub border-ub-border mt-10 rounded-2xl border border-dashed py-20 text-center text-[14px]">
+                <p className="text-ink-2 border-line mt-10 rounded-2xl border border-dashed py-20 text-center text-[14px]">
                     {year}년에 받은 책이 아직 없어요.
                 </p>
             )}
 
-            <p className="text-ub-muted mt-9 flex items-center gap-2 text-[13px]">
+            <p className="text-muted-foreground mt-9 flex items-center gap-2 text-[13px]">
                 <Lock className="size-3.5" strokeWidth={1.6} />
                 나의 서가는 나만 볼 수 있는 기록이에요.
             </p>

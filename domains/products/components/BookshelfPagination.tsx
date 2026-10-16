@@ -9,7 +9,7 @@ interface BookshelfPaginationProps {
     totalPages: number;
 }
 
-const itemClass = 'grid h-8 min-w-8 place-items-center rounded-lg text-ub-sub';
+const itemClass = 'grid h-8 min-w-8 place-items-center rounded-lg text-ink-2';
 
 export default function BookshelfPagination({
     query,
@@ -27,7 +27,7 @@ export default function BookshelfPagination({
             <Link
                 href={href(to)}
                 aria-label={label}
-                className={cn(itemClass, 'hover:bg-ub-card')}
+                className={cn(itemClass, 'hover:bg-paper-2')}
             >
                 {icon}
             </Link>
@@ -51,8 +51,8 @@ export default function BookshelfPagination({
                     className={cn(
                         itemClass,
                         p === page
-                            ? 'bg-ub-ink text-white'
-                            : 'hover:bg-ub-card',
+                            ? 'bg-ink text-white'
+                            : 'hover:bg-paper-2',
                     )}
                 >
                     {p}

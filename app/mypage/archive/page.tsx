@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function ArchivePage() {
     return (
         <>
-            <h1 className="font-ub-serif text-[30px] md:text-[34px]">
+            <h1 className="font-serif text-[30px] md:text-[34px]">
                 나의 서가
             </h1>
             {/* 저장한 메모가 매번 반영되도록 요청 시점에 읽어요 */}
@@ -42,15 +42,15 @@ async function ArchiveContent() {
 function ArchiveSkeleton() {
     return (
         <div aria-hidden="true" className="animate-pulse">
-            <div className="bg-ub-card mt-4 h-5 w-2/3 rounded" />
+            <div className="bg-paper-2 mt-4 h-5 w-2/3 rounded" />
             <div className="mt-9 grid grid-cols-3 gap-3">
                 {Array.from({ length: 3 }, (_, i) => (
-                    <div key={i} className="bg-ub-card h-[108px] rounded-xl" />
+                    <div key={i} className="bg-paper-2 h-[108px] rounded-xl" />
                 ))}
             </div>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 3 }, (_, i) => (
-                    <div key={i} className="bg-ub-card h-[530px] rounded-2xl" />
+                    <div key={i} className="bg-paper-2 h-[530px] rounded-2xl" />
                 ))}
             </div>
         </div>

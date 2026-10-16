@@ -15,7 +15,7 @@ function Postcard({
     return (
         <div
             className={cn(
-                'relative rounded-[4px] bg-[#fffdf8] font-[family-name:var(--font-nanum-pen)] text-[#2f3a55] shadow-[0_8px_22px_rgba(80,60,30,0.16)]',
+                'relative rounded-[4px] bg-card font-hand text-[#2f3a55] shadow-[0_8px_22px_rgba(80,60,30,0.16)]',
                 large
                     ? 'w-[min(90vw,640px)] px-12 py-12 text-[38px] leading-[64px]'
                     : 'w-full max-w-[346px] -rotate-2 px-7 pt-7 pb-6 text-[21px] leading-[34px]',
@@ -62,13 +62,13 @@ export default function UnboxingPostcard({
 
             <div>
                 <p className="text-[16px] font-bold">손글씨 엽서</p>
-                <p className="text-ub-sub mt-2 max-w-[150px] text-[13px] leading-[22px]">
+                <p className="text-ink-2 mt-2 max-w-[150px] text-[13px] leading-[22px]">
                     상자 속 엽서를 스캔해 함께 보관해요.
                 </p>
                 <button
                     type="button"
                     onClick={() => setOpen(true)}
-                    className="border-ub-border hover:border-ub-olive mt-4 inline-flex h-[34px] items-center gap-1.5 rounded-full border px-4 text-[13px] font-bold transition-colors"
+                    className="border-line hover:border-olive mt-4 inline-flex h-[34px] items-center gap-1.5 rounded-full border px-4 text-[13px] font-bold transition-colors"
                 >
                     <ZoomIn className="size-4" strokeWidth={1.8} />
                     크게 보기
@@ -92,7 +92,7 @@ export default function UnboxingPostcard({
                             type="button"
                             onClick={() => setOpen(false)}
                             aria-label="닫기"
-                            className="bg-ub-ink absolute -top-4 -right-4 grid size-9 place-items-center rounded-full text-white"
+                            className="bg-ink absolute -top-4 -right-4 grid size-9 place-items-center rounded-full text-white"
                         >
                             <X className="size-4" />
                         </button>

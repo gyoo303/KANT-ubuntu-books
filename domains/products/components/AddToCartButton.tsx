@@ -41,7 +41,7 @@ export default function AddToCartButton({
                 type="button"
                 onClick={handleClick}
                 className={cn(
-                    'border-ub-border bg-ub-bg hover:border-ub-olive inline-flex h-12 items-center justify-center gap-1.5 rounded-full border text-sm font-bold transition-colors',
+                    'border-line bg-paper hover:border-olive inline-flex h-12 items-center justify-center gap-1.5 rounded-full border text-sm font-bold transition-colors',
                     className,
                 )}
             >
@@ -59,8 +59,8 @@ export default function AddToCartButton({
                 added ? `${title} 장바구니에 담김` : `${title} 장바구니 담기`
             }
             className={cn(
-                'border-ub-border bg-ub-bg hover:border-ub-olive hover:bg-ub-olive grid size-[38px] place-items-center rounded-full border transition-colors hover:text-white',
-                added && 'border-ub-olive bg-ub-olive text-white',
+                'border-line bg-paper hover:border-olive hover:bg-olive grid size-[38px] place-items-center rounded-full border transition-colors hover:text-white',
+                added && 'border-olive bg-olive text-white',
                 className,
             )}
         >

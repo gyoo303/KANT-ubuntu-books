@@ -43,7 +43,7 @@ export default function AddShelfNote({ entryId }: { entryId: string }) {
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="border-ub-border text-ub-muted hover:border-ub-olive hover:text-ub-sub flex h-[47px] w-full items-center gap-2 rounded-[10px] border border-dashed px-4 text-[14px] transition-colors"
+                className="border-line text-muted-foreground hover:border-olive hover:text-ink-2 flex h-[47px] w-full items-center gap-2 rounded-[10px] border border-dashed px-4 text-[14px] transition-colors"
             >
                 <Plus className="size-4" strokeWidth={1.6} />한 줄 남기기
             </button>
@@ -56,7 +56,7 @@ export default function AddShelfNote({ entryId }: { entryId: string }) {
                 e.preventDefault();
                 void save();
             }}
-            className="border-ub-olive rounded-[10px] border bg-[#fdfaf4] p-3"
+            className="border-olive rounded-[10px] border bg-card p-3"
         >
             <input
                 autoFocus
@@ -65,10 +65,10 @@ export default function AddShelfNote({ entryId }: { entryId: string }) {
                 maxLength={SHELF_NOTE_MAX_LENGTH}
                 placeholder="기억하고 싶은 한 줄"
                 aria-label="한 줄 메모"
-                className="font-ub-serif w-full bg-transparent text-[15px] outline-none"
+                className="font-serif w-full bg-transparent text-[15px] outline-none"
             />
             <div className="mt-2 flex items-center justify-between">
-                <span className="text-ub-muted text-[11px]">
+                <span className="text-muted-foreground text-[11px]">
                     {[...content].length} / {SHELF_NOTE_MAX_LENGTH}
                 </span>
                 <div className="flex gap-1.5">
@@ -79,21 +79,21 @@ export default function AddShelfNote({ entryId }: { entryId: string }) {
                             setContent('');
                             setError(null);
                         }}
-                        className="text-ub-sub rounded-full px-3 py-1 text-[12px]"
+                        className="text-ink-2 rounded-full px-3 py-1 text-[12px]"
                     >
                         취소
                     </button>
                     <button
                         type="submit"
                         disabled={pending || content.trim() === ''}
-                        className="bg-ub-ink rounded-full px-3 py-1 text-[12px] font-bold text-white disabled:opacity-40"
+                        className="bg-ink rounded-full px-3 py-1 text-[12px] font-bold text-white disabled:opacity-40"
                     >
                         꽂기
                     </button>
                 </div>
             </div>
             {error && (
-                <p role="alert" className="mt-1.5 text-[12px] text-[#c4573d]">
+                <p role="alert" className="mt-1.5 text-[12px] text-post">
                     {error}
                 </p>
             )}

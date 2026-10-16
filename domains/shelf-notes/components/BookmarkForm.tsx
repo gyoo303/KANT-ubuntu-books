@@ -10,7 +10,8 @@ import {
     SHELF_NOTE_MAX_LENGTH,
 } from '@/domains/shelf-notes/utils/validateShelfNote';
 import { todayKst } from '@/domains/shelf-notes/utils/formatShelfDate';
-import { cn } from '@/shared/utils/cn';
+import { Button } from '@/shared/components/ui/button';
+import { Chip } from '@/shared/components/ui/chip';
 import { Bookmark, CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
@@ -66,15 +67,15 @@ export default function BookmarkForm({
     };
 
     return (
-        <section className="bg-ub-card relative mt-8 rounded-[20px] px-6 pt-10 pb-8 md:px-8">
+        <section className="bg-paper-2 relative mt-8 rounded-[20px] px-6 pt-10 pb-8 md:px-8">
             {/* 빨간 책갈피 리본 */}
             <span
                 aria-hidden="true"
-                className="absolute -top-2 left-8 h-[46px] w-[22px] bg-[#c4573d] [clip-path:polygon(0_0,100%_0,100%_100%,50%_78%,0_100%)]"
+                className="absolute -top-2 left-8 h-[46px] w-[22px] bg-post [clip-path:polygon(0_0,100%_0,100%_100%,50%_78%,0_100%)]"
             />
             <div className="pl-10">
-                <h2 className="font-ub-serif text-[20px]">책갈피 꽂기</h2>
-                <p className="text-ub-sub mt-1.5 text-[13px]">
+                <h2 className="font-serif text-[20px]">책갈피 꽂기</h2>
+                <p className="text-ink-2 mt-1.5 text-[13px]">
                     다 읽고 나서, 기억하고 싶은 한 줄을 남겨주세요. 나만 볼 수
                     있어요.
                 </p>
@@ -86,7 +87,7 @@ export default function BookmarkForm({
                     void submit();
                 }}
             >
-                <label className="border-ub-olive-dark mt-6 flex h-[68px] items-center gap-3 rounded-xl border bg-[#fffdf8] px-5">
+                <label className="border-olive/90 mt-6 flex h-[68px] items-center gap-3 rounded-xl border bg-card px-5">
                     <span className="sr-only">한 줄 메모</span>
                     <input
                         value={content}
@@ -95,9 +96,9 @@ export default function BookmarkForm({
                         }
                         maxLength={SHELF_NOTE_MAX_LENGTH}
                         placeholder="기억하고 싶은 한 줄"
-                        className="font-ub-serif placeholder:text-ub-muted min-w-0 flex-1 bg-transparent text-[19px] outline-none"
+                        className="font-serif placeholder:text-muted-foreground min-w-0 flex-1 bg-transparent text-[19px] outline-none"
                     />
-                    <span className="text-ub-muted shrink-0 text-[12px]">
+                    <span className="text-muted-foreground shrink-0 text-[12px]">
                         {length} / {SHELF_NOTE_MAX_LENGTH}
                     </span>
                 </label>
@@ -108,7 +109,7 @@ export default function BookmarkForm({
                         <button
                             type="button"
                             onClick={() => dateRef.current?.showPicker()}
-                            className="border-ub-border text-ub-sub relative inline-flex h-[30px] items-center gap-1.5 rounded-full border px-2.5 text-[12.5px]"
+                            className="border-line text-ink-2 relative inline-flex h-[30px] items-center gap-1.5 rounded-full border px-2.5 text-[12.5px]"
                         >
                             <CalendarDays
                                 className="size-3.5"
@@ -134,41 +135,37 @@ export default function BookmarkForm({
                         </button>
 
                         {SEASONS.map((s) => (
-                            <button
+                            <Chip
                                 key={s}
-                                type="button"
-                                aria-pressed={s === season}
-                                onClick={() => changed(() => setSeason(s))}
-                                className={cn(
-                                    'h-[30px] rounded-full border px-2.5 text-[12.5px] transition-colors',
-                                    s === season
-                                        ? 'border-ub-ink bg-ub-ink font-bold text-white'
-                                        : 'border-ub-border text-ub-sub hover:border-ub-olive',
-                                )}
+                                size="sm"
+                                pressed={s === season}
+                                onPressedChange={() => changed(() => setSeason(s))}
+                                className="h-[30px] px-2.5 text-[12.5px]"
                             >
                                 {s}
-                            </button>
+                            </Chip>
                         ))}
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
                         disabled={status !== 'idle' || content.trim() === ''}
-                        className="bg-ub-ink inline-flex h-9 shrink-0 items-center gap-2 rounded-full px-4 text-[14px] font-bold text-white transition-opacity disabled:opacity-40"
+                        variant="ink"
+                        className="h-9 gap-2 px-4 text-[14px]"
                     >
                         <Bookmark className="size-4" strokeWidth={1.8} />
                         {status === 'saving' ? '꽂는 중…' : '서가에 꽂기'}
-                    </button>
+                    </Button>
                 </div>
 
                 <div aria-live="polite" className="min-h-0">
                     {error && (
-                        <p className="mt-3 text-[13px] text-[#c4573d]">
+                        <p className="mt-3 text-[13px] text-post">
                             {error}
                         </p>
                     )}
                     {status === 'saved' && (
-                        <p className="text-ub-olive mt-3 text-[13px]">
+                        <p className="text-olive mt-3 text-[13px]">
                             서가에 꽂았어요.{' '}
                             <Link
                                 href="/mypage/archive"

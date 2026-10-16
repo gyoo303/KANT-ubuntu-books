@@ -20,10 +20,10 @@ export default function ProductCard({ product, themeLabel }: ProductCardProps) {
         <article
             className={cn(
                 'group relative rounded-xl',
-                'has-[a:focus-visible]:outline-ub-olive has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-[6px]',
+                'has-[a:focus-visible]:outline-olive has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-[6px]',
             )}
         >
-            <div className="bg-ub-card group-hover:bg-ub-card-hover relative grid place-items-center rounded-xl py-8 transition-colors">
+            <div className="bg-paper-2 group-hover:bg-line relative grid place-items-center rounded-xl py-8 transition-colors">
                 <BookCover
                     product={product}
                     className={cn(
@@ -32,13 +32,13 @@ export default function ProductCard({ product, themeLabel }: ProductCardProps) {
                     )}
                 />
                 {soldOut && (
-                    <span className="bg-ub-cream text-ub-ink absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-[12px]">
+                    <span className="bg-letter text-ink absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-[12px]">
                         일시 품절
                     </span>
                 )}
             </div>
 
-            <p className="text-ub-sub mt-7 text-[12px]">{themeLabel}</p>
+            <p className="text-ink-2 mt-7 text-[12px]">{themeLabel}</p>
             <h3 className="mt-1 text-[18px] font-bold">
                 <Link
                     href={`/bookshelf/${product.id}`}
@@ -47,10 +47,10 @@ export default function ProductCard({ product, themeLabel }: ProductCardProps) {
                     {product.title}
                 </Link>
             </h3>
-            <p className="text-ub-muted mt-0.5 text-[13px]">
+            <p className="text-muted-foreground mt-0.5 text-[13px]">
                 {product.author} · {product.publisher}
             </p>
-            <p className="text-ub-sub mt-4 hidden text-[14px] md:block">
+            <p className="text-ink-2 mt-4 hidden text-[14px] md:block">
                 “{product.one_line}”
             </p>
 
@@ -58,7 +58,7 @@ export default function ProductCard({ product, themeLabel }: ProductCardProps) {
                 <span
                     className={cn(
                         'text-[16px] font-bold',
-                        soldOut && 'text-ub-muted font-normal',
+                        soldOut && 'text-muted-foreground font-normal',
                     )}
                 >
                     {formatPrice(product.price)}

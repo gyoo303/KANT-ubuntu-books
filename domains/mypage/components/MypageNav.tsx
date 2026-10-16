@@ -36,8 +36,8 @@ export function MypageNavLinks({ pathname }: { pathname: string | null }) {
                         className={cn(
                             'flex h-[46px] items-center gap-3 rounded-[10px] px-[22px] text-[15px] transition-colors',
                             active
-                                ? 'bg-ub-card text-ub-ink font-bold'
-                                : 'text-ub-sub hover:bg-ub-card/60',
+                                ? 'bg-paper-2 text-ink font-bold'
+                                : 'text-ink-2 hover:bg-paper-2/60',
                         )}
                     >
                         <Icon className="size-[18px]" strokeWidth={1.6} />

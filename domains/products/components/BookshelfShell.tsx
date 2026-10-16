@@ -1,21 +1,12 @@
-import { Noto_Serif_KR } from 'next/font/google';
-
-// 테마 서가 화면 공통: 바탕색 + 제목용 세리프 폰트
-const notoSerifKr = Noto_Serif_KR({
-    subsets: ['latin'],
-    weight: ['500', '600'],
-    display: 'swap',
-    variable: '--font-noto-serif-kr',
-});
-
+// 테마 서가 화면 공통: 바탕색 + 가운데 정렬 (글꼴은 app/layout.tsx 의 팀 공통 글꼴 사용)
 export default function BookshelfShell({
     children,
 }: {
     children: React.ReactNode;
 }) {
     return (
-        <div className={`${notoSerifKr.variable} bg-ub-bg text-ub-ink pb-20`}>
-            <div className="mx-auto max-w-[1168px] px-4 md:px-6">{children}</div>
+        <div className="bg-paper text-ink pb-20">
+            <div className="max-w-page mx-auto px-4 md:px-6">{children}</div>
         </div>
     );
 }

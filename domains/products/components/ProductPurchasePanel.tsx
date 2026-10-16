@@ -29,29 +29,29 @@ export default function ProductPurchasePanel({
     };
 
     return (
-        <div className="border-ub-line border-t pt-6">
+        <div className="border-line border-t pt-6">
             <p className="text-[26px] font-medium">
                 {formatPrice(product.price)}
             </p>
 
-            <div className="border-ub-line text-ub-sub mt-4 mb-5 flex items-center justify-between gap-3 border-b pb-4 text-xs">
+            <div className="border-line text-ink-2 mt-4 mb-5 flex items-center justify-between gap-3 border-b pb-4 text-xs">
                 <span>
                     배송비 3,000원 · 30,000원 이상 무료 ·{' '}
                     {soldOut ? '일시 품절' : `재고 ${product.stock}권`}
                 </span>
-                <div className="border-ub-border inline-flex h-[38px] shrink-0 items-center rounded-full border">
+                <div className="border-line inline-flex h-[38px] shrink-0 items-center rounded-full border">
                     <button
                         type="button"
                         aria-label="수량 빼기"
                         onClick={() => changeQty(qty - 1)}
                         disabled={soldOut || qty <= 1}
-                        className="text-ub-ink grid h-full w-[38px] place-items-center disabled:opacity-30"
+                        className="text-ink grid h-full w-[38px] place-items-center disabled:opacity-30"
                     >
                         <Minus className="h-3.5 w-3.5" />
                     </button>
                     <output
                         aria-live="polite"
-                        className="text-ub-ink w-9 text-center text-[13px]"
+                        className="text-ink w-9 text-center text-[13px]"
                     >
                         {qty}
                     </output>
@@ -60,7 +60,7 @@ export default function ProductPurchasePanel({
                         aria-label="수량 더하기"
                         onClick={() => changeQty(qty + 1)}
                         disabled={soldOut || qty >= product.stock}
-                        className="text-ub-ink grid h-full w-[38px] place-items-center disabled:opacity-30"
+                        className="text-ink grid h-full w-[38px] place-items-center disabled:opacity-30"
                     >
                         <Plus className="h-3.5 w-3.5" />
                     </button>
@@ -84,14 +84,14 @@ export default function ProductPurchasePanel({
                     <button
                         type="button"
                         onClick={handleBuyNow}
-                        className="bg-ub-olive hover:bg-ub-olive-dark h-12 rounded-full text-sm font-bold text-white transition-colors"
+                        className="bg-olive hover:bg-olive/90 h-12 rounded-full text-sm font-bold text-white transition-colors"
                     >
                         바로 구매하기
                     </button>
                 </div>
             )}
 
-            <p className="text-ub-muted mt-3 flex items-center gap-1 text-[11px]">
+            <p className="text-muted-foreground mt-3 flex items-center gap-1 text-[11px]">
                 <Package className="h-3 w-3" aria-hidden="true" />
                 어은동 책방에서 직접 포장해 보내드려요. 2–3일 안에 출발해요.
             </p>

@@ -22,8 +22,8 @@ export default function ThemeTabs({ themes, activeThemeId }: ThemeTabsProps) {
                         className={cn(
                             'inline-flex h-[46px] cursor-default items-center gap-2 rounded-full border px-[22px] text-[15px] select-none',
                             active
-                                ? 'border-ub-olive bg-ub-olive font-bold text-white'
-                                : 'border-ub-border text-ub-sub',
+                                ? 'border-olive bg-olive font-bold text-white'
+                                : 'border-line text-ink-2',
                         )}
                     >
                         {tab.icon && (
