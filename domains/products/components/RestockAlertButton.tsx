@@ -29,7 +29,7 @@ export default function RestockAlertButton({
             disabled={requested}
             className={cn(
                 variant === 'chip'
-                    ? 'bg-ub-card text-ub-sub rounded-full px-2.5 py-0.5 text-[10px] hover:bg-[#e2d6be]'
+                    ? 'bg-ub-card text-ub-sub rounded-full px-3 py-1 text-[12px] hover:bg-[#e2d6be]'
                     : 'border-ub-border bg-ub-bg hover:border-ub-olive h-12 rounded-full border text-sm font-bold',
                 'transition-colors disabled:cursor-default disabled:opacity-70',
                 className,

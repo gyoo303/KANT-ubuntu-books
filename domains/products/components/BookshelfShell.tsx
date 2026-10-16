@@ -15,7 +15,7 @@ export default function BookshelfShell({
 }) {
     return (
         <div className={`${notoSerifKr.variable} bg-ub-bg text-ub-ink pb-20`}>
-            <div className="mx-auto max-w-[980px] px-4 md:px-6">{children}</div>
+            <div className="mx-auto max-w-[1168px] px-4 md:px-6">{children}</div>
         </div>
     );
 }

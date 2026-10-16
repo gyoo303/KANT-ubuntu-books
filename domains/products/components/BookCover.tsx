@@ -5,7 +5,7 @@ import Image from 'next/image';
 interface BookCoverProps {
     product: Pick<
         Product,
-        'title' | 'author' | 'cover_color' | 'cover_image_url'
+        'title' | 'author' | 'cover_color' | 'cover_image_url' | 'cover_lines'
     >;
     size?: 'sm' | 'md' | 'lg'; // sm: 같은 서가의 책(글자 없음), md: 목록 카드, lg: 상세
     className?: string;
@@ -20,8 +20,8 @@ export default function BookCover({
     return (
         <div
             className={cn(
-                'relative aspect-[2/3] overflow-hidden rounded-[3px_6px_6px_3px] text-white shadow-[0_10px_22px_rgba(60,40,20,0.18)]',
-                "before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-[5%] before:bg-black/20 before:content-['']",
+                'relative aspect-[2/3] overflow-hidden rounded-[2px_8px_8px_2px] text-white shadow-[0_10px_22px_rgba(60,40,20,0.18)]',
+                "before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-[3.5%] before:bg-black/20 before:content-['']",
                 className,
             )}
             style={{ backgroundColor: product.cover_color }}
@@ -39,15 +39,21 @@ export default function BookCover({
                     <>
                         <p
                             className={cn(
-                                'font-ub-serif absolute top-[12%] right-[14%] left-[14%] leading-snug font-semibold break-keep',
+                                'absolute top-[8%] right-[12%] left-[12%] leading-snug font-bold break-keep',
                                 size === 'lg'
                                     ? 'text-2xl md:text-[26px]'
-                                    : 'text-sm md:text-[15px]',
+                                    : 'text-[15px] md:text-[18px]',
                             )}
                         >
-                            {product.title}
+                            {(product.cover_lines ?? [product.title]).map(
+                                (line) => (
+                                    <span key={line} className="block">
+                                        {line}
+                                    </span>
+                                ),
+                            )}
                         </p>
-                        <p className="absolute bottom-[7%] left-[14%] text-[11px] opacity-85">
+                        <p className="absolute bottom-[9%] left-[12%] text-[13px] opacity-85">
                             {product.author}
                             {size === 'lg' && ' 지음'}
                         </p>

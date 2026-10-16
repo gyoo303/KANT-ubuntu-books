@@ -59,12 +59,12 @@ export default function AddToCartButton({
                 added ? `${title} 장바구니에 담김` : `${title} 장바구니 담기`
             }
             className={cn(
-                'border-ub-border bg-ub-bg hover:border-ub-olive hover:bg-ub-olive grid h-[30px] w-[30px] place-items-center rounded-full border transition-colors hover:text-white',
+                'border-ub-border bg-ub-bg hover:border-ub-olive hover:bg-ub-olive grid size-[38px] place-items-center rounded-full border transition-colors hover:text-white',
                 added && 'border-ub-olive bg-ub-olive text-white',
                 className,
             )}
         >
-            <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+            <Icon className="size-4" aria-hidden="true" />
         </button>
     );
 }

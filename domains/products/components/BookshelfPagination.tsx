@@ -9,7 +9,7 @@ interface BookshelfPaginationProps {
     totalPages: number;
 }
 
-const itemClass = 'grid h-6 min-w-6 place-items-center rounded-md text-ub-sub';
+const itemClass = 'grid h-8 min-w-8 place-items-center rounded-lg text-ub-sub';
 
 export default function BookshelfPagination({
     query,
@@ -36,7 +36,7 @@ export default function BookshelfPagination({
     return (
         <nav
             aria-label="페이지"
-            className="mt-14 flex justify-center gap-1.5 text-xs"
+            className="mt-16 flex justify-center gap-2 text-[14px]"
         >
             {renderArrow(
                 page - 1,

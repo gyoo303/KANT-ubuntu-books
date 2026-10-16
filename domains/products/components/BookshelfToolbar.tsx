@@ -36,17 +36,17 @@ export default function BookshelfToolbar({
         });
 
     return (
-        <div className="text-ub-sub mb-5 flex items-center justify-between text-xs">
+        <div className="text-ub-sub mb-7 flex items-center justify-between text-[14px]">
             <span>{totalCount}권</span>
-            <div className="flex items-center gap-3.5">
-                <label className="inline-flex cursor-pointer items-center gap-1.5">
+            <div className="flex items-center gap-4">
+                <label className="inline-flex cursor-pointer items-center gap-2">
                     <input
                         type="checkbox"
                         checked={optimistic.hideSoldOut}
                         onChange={(e) =>
                             update({ hideSoldOut: e.target.checked })
                         }
-                        className="accent-ub-olive h-3.5 w-3.5"
+                        className="accent-ub-olive size-[18px]"
                     />
                     품절 제외
                 </label>
@@ -57,7 +57,7 @@ export default function BookshelfToolbar({
                         onChange={(e) =>
                             update({ sort: e.target.value as ProductSort })
                         }
-                        className="text-ub-ink cursor-pointer appearance-none bg-transparent pr-4 outline-none"
+                        className="text-ub-ink cursor-pointer appearance-none bg-transparent pr-5 outline-none"
                     >
                         {PRODUCT_SORT_OPTIONS.map((o) => (
                             <option key={o.value} value={o.value}>
@@ -67,7 +67,7 @@ export default function BookshelfToolbar({
                     </select>
                     <ChevronDown
                         aria-hidden="true"
-                        className="text-ub-ink pointer-events-none absolute top-1/2 right-0 h-3 w-3 -translate-y-1/2"
+                        className="text-ub-ink pointer-events-none absolute top-1/2 right-0 size-3.5 -translate-y-1/2"
                     />
                 </div>
             </div>

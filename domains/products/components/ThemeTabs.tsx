@@ -12,7 +12,7 @@ export default function ThemeTabs({ themes, activeThemeId }: ThemeTabsProps) {
     const tabs = [{ id: 'all', name: '전체', icon: null }, ...themes];
 
     return (
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-8 flex flex-wrap gap-2.5">
             {tabs.map((tab) => {
                 const active = tab.id === activeThemeId;
                 return (
@@ -20,14 +20,14 @@ export default function ThemeTabs({ themes, activeThemeId }: ThemeTabsProps) {
                         key={tab.id}
                         aria-current={active ? 'true' : undefined}
                         className={cn(
-                            'inline-flex cursor-default items-center gap-1.5 rounded-full border px-4 py-2 text-xs select-none',
+                            'inline-flex h-[46px] cursor-default items-center gap-2 rounded-full border px-[22px] text-[15px] select-none',
                             active
                                 ? 'border-ub-olive bg-ub-olive font-bold text-white'
                                 : 'border-ub-border text-ub-sub',
                         )}
                     >
                         {tab.icon && (
-                            <ThemeIcon name={tab.icon} className="h-3 w-3" />
+                            <ThemeIcon name={tab.icon} className="size-4" />
                         )}
                         {tab.name}
                     </span>

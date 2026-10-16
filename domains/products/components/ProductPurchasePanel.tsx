@@ -24,13 +24,13 @@ export default function ProductPurchasePanel({
     const handleBuyNow = () => {
         // 구매는 회원 전용 → 로그인 페이지로 보내고, 로그인 후 이 상세로 돌아오게 callbackUrl 을 남겨요.
         // TODO: 로그인 상태면 주문서로 바로 이동 (인증 작업과 연결)
-        const callbackUrl = encodeURIComponent(`/${product.id}`);
+        const callbackUrl = encodeURIComponent(`/bookshelf/${product.id}`);
         router.push(`/auth/signin?callbackUrl=${callbackUrl}`);
     };
 
     return (
         <div className="border-ub-line border-t pt-6">
-            <p className="font-ub-serif text-[26px] font-medium">
+            <p className="text-[26px] font-medium">
                 {formatPrice(product.price)}
             </p>
 

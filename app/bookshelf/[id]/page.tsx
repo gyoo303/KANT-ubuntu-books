@@ -52,7 +52,7 @@ export default function ProductDetailPage({ params }: { params: Params }) {
 async function ProductDetail({ params }: { params: Params }) {
     const { id } = await params;
     const product = await getProduct(id);
-    if (!product) notFound(); // → app/[id]/not-found.tsx (없는 상품 안내)
+    if (!product) notFound(); // → app/bookshelf/[id]/not-found.tsx (없는 상품 안내)
 
     const [theme, related] = await Promise.all([
         getTheme(product.theme_id),
@@ -66,14 +66,14 @@ async function ProductDetail({ params }: { params: Params }) {
                 aria-label="현재 위치"
                 className="text-ub-sub pt-7 pb-5 text-[11px]"
             >
-                <Link href="/" className="hover:text-ub-ink hover:underline">
+                <Link href="/bookshelf" className="hover:text-ub-ink hover:underline">
                     테마 서가
                 </Link>
                 {theme && (
                     <>
                         {' / '}
                         <Link
-                            href="/"
+                            href="/bookshelf"
                             className="hover:text-ub-ink hover:underline"
                         >
                             {theme.name}
@@ -90,14 +90,14 @@ async function ProductDetail({ params }: { params: Params }) {
                 <div>
                     {theme && (
                         <Link
-                            href="/"
+                            href="/bookshelf"
                             className="bg-ub-olive-soft text-ub-olive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px]"
                         >
                             <ThemeIcon name={theme.icon} className="h-3 w-3" />
                             {theme.name}
                         </Link>
                     )}
-                    <h1 className="font-ub-serif mt-2.5 mb-1 text-[26px] font-medium md:text-[34px]">
+                    <h1 className="mt-2.5 mb-1 text-[26px] font-medium md:text-[34px]">
                         {product.title}
                     </h1>
                     <p className="text-ub-muted text-xs">
@@ -167,7 +167,7 @@ async function ProductDetail({ params }: { params: Params }) {
                     <ul className="grid grid-cols-2 gap-5 md:grid-cols-4">
                         {related.map((r) => (
                             <li key={r.id}>
-                                <Link href={`/${r.id}`} className="group block">
+                                <Link href={`/bookshelf/${r.id}`} className="group block">
                                     <div className="bg-ub-card group-hover:bg-ub-card-hover grid place-items-center rounded-lg py-4 transition-colors">
                                         <BookCover
                                             product={r}
@@ -204,7 +204,7 @@ function DetailSection({
         <section
             className={`border-ub-line grid gap-5 border-t py-10 md:grid-cols-[250px_1fr] md:gap-0 md:py-14 ${className}`}
         >
-            <h2 className="font-ub-serif text-[19px] font-medium">{title}</h2>
+            <h2 className="text-[19px] font-medium">{title}</h2>
             <div>{children}</div>
         </section>
     );

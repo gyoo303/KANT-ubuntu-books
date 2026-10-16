@@ -225,6 +225,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 4,
             sort_order: 1,
             cover_color: '#4b5a50',
+            cover_lines: ['베란다', '정원 일기'],
             one_line: '화분 세 개로 시작해도 충분하다는 걸 알려준 책.',
             curator_note:
                 '화분 세 개로 시작해도 충분하다는 걸 알려준 책이에요. 거창한 정원이 아니어도, 아침마다 잎을 들여다보는 시간이 하루를 얼마나 바꾸는지 조용히 보여줘요. 흙을 처음 만져보는 분께 가장 먼저 건네고 싶은 책입니다.',
@@ -243,6 +244,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 6,
             sort_order: 2,
             cover_color: '#a87a4c',
+            cover_lines: ['흙의', '시간'],
             one_line: '지렁이 이야기에 이렇게 마음이 놓일 줄이야.',
         },
         {
@@ -253,6 +255,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 0,
             sort_order: 3,
             cover_color: '#b3bcb0',
+            cover_lines: ['마을', '텃밭 사계'],
             one_line: '이웃과 같이 심고 같이 거두는 일 년.',
         },
         {
@@ -263,6 +266,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 3,
             sort_order: 4,
             cover_color: '#b28b6e',
+            cover_lines: ['씨앗', '도서관'],
             one_line: '토종 씨앗을 빌려주고 돌려받는 사람들.',
         },
         {
@@ -273,6 +277,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 5,
             sort_order: 5,
             cover_color: '#8a4a2c',
+            cover_lines: ['작은 땅의', '야생'],
             one_line: '잡초라 부르던 것들의 이름을 알게 됐어요.',
         },
         {
@@ -283,6 +288,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 8,
             sort_order: 6,
             cover_color: '#9c6a5c',
+            cover_lines: ['퇴비', '만드는 법'],
             one_line: '부엌과 텃밭이 이어지는 순환의 책.',
         },
         {
@@ -293,6 +299,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 2,
             sort_order: 7,
             cover_color: '#3d4966',
+            cover_lines: ['도시', '농부 일기'],
             one_line: '출근 전 한 시간, 텃밭에서 보내는 사람.',
         },
         {
@@ -303,6 +310,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 7,
             sort_order: 8,
             cover_color: '#6b6284',
+            cover_lines: ['흙 묻은', '손'],
             one_line: '짧은 시와 사진으로 엮은 텃밭의 계절.',
         },
         {
@@ -313,6 +321,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 4,
             sort_order: 9,
             cover_color: '#9a685a',
+            cover_lines: ['옥상', '꿀벌 학교'],
             one_line: '도시 한가운데서 벌을 치는 이웃들.',
         },
         {
@@ -323,6 +332,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 3,
             sort_order: 10,
             cover_color: '#5d7a74',
+            cover_lines: ['빗물', '정원'],
             one_line: '비 오는 날이 기다려지는 작은 정원 설계.',
         },
         {
@@ -333,6 +343,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 0,
             sort_order: 11,
             cover_color: '#7f8a55',
+            cover_lines: ['허브', '한 줌'],
             one_line: '창가에서 키워 찻잔으로 옮기는 허브들.',
         },
         {
@@ -343,6 +354,7 @@ export const MOCK_PRODUCTS: Product[] = (
             stock: 5,
             sort_order: 12,
             cover_color: '#6e5440',
+            cover_lines: ['뿌리의', '말'],
             one_line: '보이지 않는 곳에서 일하는 것들에 대하여.',
         },
     ] satisfies ProductSeed[]

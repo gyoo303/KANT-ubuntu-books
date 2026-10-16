@@ -3,10 +3,10 @@ import type {
     ProductSort,
 } from '@/domains/products/types/product.types';
 
-// 테마 서가(/) 의 URL 쿼리 ↔ 목록 조회 조건 변환
-// 예: /?page=2&soldout=hide&sort=price_asc
+// 테마 서가(/bookshelf) 의 URL 쿼리 ↔ 목록 조회 조건 변환
+// 예: /bookshelf?page=2&soldout=hide&sort=price_asc
 
-export const BOOKSHELF_PATH = '/';
+export const BOOKSHELF_PATH = '/bookshelf';
 
 export const PRODUCT_SORT_OPTIONS: { value: ProductSort; label: string }[] = [
     { value: 'recommended', label: '책방지기 추천순' },

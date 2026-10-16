@@ -29,6 +29,7 @@ export interface Product {
     isbn: string;
     cover_image_url: string | null; // 실제 표지 이미지가 생기기 전까지 null
     cover_color: string; // 표지 이미지가 없을 때 쓰는 색
+    cover_lines?: string[]; // 표지에 줄을 나눠 쓸 제목 (없으면 title 한 줄)
     sort_order: number; // 책방지기 추천순
 }
 

@@ -1,7 +1,7 @@
 import BookshelfShell from '@/domains/products/components/BookshelfShell';
 import Link from 'next/link';
 
-// 없는 상품 안내 — /[id] 에서 notFound() 가 호출되면 표시돼요.
+// 없는 상품 안내 — /bookshelf/[id] 에서 notFound() 가 호출되면 표시돼요.
 export default function ProductNotFound() {
     return (
         <BookshelfShell>
@@ -9,7 +9,7 @@ export default function ProductNotFound() {
                 <p className="text-ub-muted text-xs tracking-[0.14em]">
                     NOT FOUND
                 </p>
-                <h1 className="font-ub-serif mt-3 mb-2.5 text-2xl font-medium md:text-[28px]">
+                <h1 className="mt-3 mb-2.5 text-2xl font-medium md:text-[28px]">
                     찾으시는 책이 서가에 없어요
                 </h1>
                 <p className="text-ub-sub text-[13px] leading-relaxed">
@@ -19,7 +19,7 @@ export default function ProductNotFound() {
                 </p>
                 <div className="mt-7 flex gap-2.5">
                     <Link
-                        href="/"
+                        href="/bookshelf"
                         className="bg-ub-olive hover:bg-ub-olive-dark rounded-full px-5 py-3 text-[13px] font-bold text-white transition-colors"
                     >
                         테마 서가로 가기
