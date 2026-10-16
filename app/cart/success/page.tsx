@@ -28,21 +28,19 @@ export default function PaymentSuccessPage({
     searchParams: SearchParams;
 }) {
     return (
-        <div className="bg-[#f5f1ea] text-[#2b2620]">
+        <div className="bg-paper text-ink">
             <div className="mx-auto max-w-[560px] px-4 py-24 text-center">
                 {/* 승인 결과가 나올 때까지 fallback 문구를 먼저 보여준다 */}
                 <Suspense
                     fallback={
-                        <p className="text-[#5c554b]">
-                            결제를 확인하고 있어요...
-                        </p>
+                        <p className="text-ink-2">결제를 확인하고 있어요...</p>
                     }
                 >
                     <PaymentResult searchParams={searchParams} />
                 </Suspense>
                 <Link
                     href="/cart"
-                    className="mt-10 inline-block rounded-full bg-[#636b3a] px-8 py-4 font-semibold text-white"
+                    className="bg-olive mt-10 inline-block rounded-full px-8 py-4 font-semibold text-white"
                 >
                     장바구니로 돌아가기
                 </Link>
@@ -70,10 +68,10 @@ async function PaymentResult({ searchParams }: { searchParams: SearchParams }) {
         // 승인 성공
         <>
             <h1 className="text-3xl font-medium">결제 완료</h1>
-            <p className="mt-4 text-[#5c554b]">
+            <p className="text-ink-2 mt-4">
                 {formatPrice(result.amount)} 결제가 완료됐어요.
             </p>
-            <p className="mt-2 text-sm text-[#8a8278]">
+            <p className="text-muted-foreground mt-2 text-sm">
                 주문번호 {result.orderId} · {result.method}
             </p>
         </>
@@ -81,8 +79,8 @@ async function PaymentResult({ searchParams }: { searchParams: SearchParams }) {
         // 승인 실패: 이유(message)와 에러 코드(code)를 보여준다
         <>
             <h1 className="text-3xl font-medium">결제를 완료하지 못했어요</h1>
-            <p className="mt-4 text-[#5c554b]">{result.message}</p>
-            <p className="mt-2 text-sm text-[#8a8278]">{result.code}</p>
+            <p className="text-ink-2 mt-4">{result.message}</p>
+            <p className="text-muted-foreground mt-2 text-sm">{result.code}</p>
         </>
     );
 }

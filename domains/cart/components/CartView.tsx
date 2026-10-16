@@ -106,9 +106,9 @@ export default function CartView({
         setItems((prev) => prev.filter((item) => !item.selected));
 
     return (
-        <div className="bg-[#f5f1ea] text-[#2b2620]">
+        <div className="bg-paper text-ink">
             <div className="mx-auto max-w-[1120px] px-4 py-16 md:px-6">
-                <p className="text-sm tracking-wide text-[#5c554b]">/cart</p>
+                <p className="text-ink-2 text-sm tracking-wide">/cart</p>
                 <h1 className="mt-2 text-4xl font-medium">장바구니</h1>
 
                 {/* 넓은 화면(lg 이상)에서는 왼쪽 목록 + 오른쪽 400px 금액 카드 2단 배치 */}
@@ -116,11 +116,11 @@ export default function CartView({
                     {/* 상품 목록 */}
                     <section>
                         {items.length === 0 ? (
-                            <p className="border-t border-[#2b2620] py-20 text-center text-[#8a8278]">
+                            <p className="border-ink text-muted-foreground border-t py-20 text-center">
                                 장바구니가 비어 있어요.
                             </p>
                         ) : (
-                            <ul className="border-t border-[#2b2620]">
+                            <ul className="border-ink border-t">
                                 {/* 상품마다 한 줄(CartRow)씩 그린다 */}
                                 {items.map((item) => (
                                     <CartRow
@@ -152,7 +152,7 @@ export default function CartView({
                                     checked={allSelected}
                                     onChange={toggleAll}
                                     disabled={selectable.length === 0}
-                                    className="size-5 accent-[#636b3a]"
+                                    className="accent-olive size-5"
                                 />
                                 전체 선택 ({selectedCount}/{items.length})
                             </label>
@@ -176,12 +176,12 @@ export default function CartView({
                     </section>
 
                     {/* 주문 금액 카드 (lg 이상에서는 스크롤해도 화면에 붙어 따라온다: sticky) */}
-                    <aside className="h-fit rounded-2xl border border-[#e6dfd3] bg-[#fffdf8] p-8 lg:sticky lg:top-24">
+                    <aside className="border-line bg-card h-fit rounded-2xl border p-8 lg:sticky lg:top-24">
                         <h2 className="text-xl font-medium">주문 금액</h2>
                         <dl className="mt-6 space-y-4 text-sm">
                             {/* 상품 N종 (N권) / 상품 금액 */}
                             <div className="flex justify-between">
-                                <dt className="text-[#5c554b]">
+                                <dt className="text-ink-2">
                                     상품 {summary.kind_count}종 (
                                     {summary.total_quantity}권)
                                 </dt>
@@ -189,12 +189,12 @@ export default function CartView({
                             </div>
                             {/* 배송비: 0원이면 "무료 (30,000원 이상)" 표시 */}
                             <div className="flex justify-between">
-                                <dt className="text-[#5c554b]">배송비</dt>
+                                <dt className="text-ink-2">배송비</dt>
                                 <dd>
                                     {summary.shipping_fee === 0 ? (
                                         <>
                                             무료{' '}
-                                            <span className="text-[#5c554b]">
+                                            <span className="text-ink-2">
                                                 (
                                                 {formatPrice(
                                                     FREE_SHIPPING_THRESHOLD,
@@ -209,7 +209,7 @@ export default function CartView({
                             </div>
                         </dl>
                         {/* 최종 결제 금액 */}
-                        <div className="mt-6 flex items-center justify-between border-t border-[#e6dfd3] pt-6">
+                        <div className="border-line mt-6 flex items-center justify-between border-t pt-6">
                             <span className="text-sm">결제 금액</span>
                             <strong className="text-2xl font-medium">
                                 {formatPrice(summary.payment_total)}
@@ -224,7 +224,7 @@ export default function CartView({
                                         type="checkbox"
                                         checked={agreed}
                                         onChange={() => setAgreed(!agreed)}
-                                        className="size-5 accent-[#636b3a]"
+                                        className="accent-olive size-5"
                                     />
                                     주문 내용 확인 및 결제 동의
                                 </label>
@@ -237,7 +237,7 @@ export default function CartView({
                                         paying ||
                                         summary.kind_count === 0
                                     }
-                                    className="mt-4 h-14 w-full rounded-full bg-[#636b3a] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+                                    className="bg-olive mt-4 h-14 w-full rounded-full font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
                                 >
                                     {formatPrice(summary.payment_total)}{' '}
                                     결제하기
@@ -249,7 +249,7 @@ export default function CartView({
                                 type="button"
                                 onClick={continuePurchase}
                                 disabled={summary.kind_count === 0}
-                                className="mt-8 h-14 w-full rounded-full bg-[#636b3a] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+                                className="bg-olive mt-8 h-14 w-full rounded-full font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
                             >
                                 구매 계속하기
                             </button>
@@ -281,7 +281,7 @@ function CartRow({
     return (
         <li
             className={cn(
-                'flex items-center gap-4 border-b border-[#e6dfd3] py-6 md:gap-6',
+                'border-line flex items-center gap-4 border-b py-6 md:gap-6',
                 item.sold_out && 'opacity-50',
             )}
         >
@@ -292,7 +292,7 @@ function CartRow({
                 onChange={onToggle}
                 disabled={item.sold_out}
                 aria-label={`${item.title} 선택`}
-                className="size-5 shrink-0 accent-[#636b3a]"
+                className="accent-olive size-5 shrink-0"
             />
             {/* 표지: 이미지가 아직 없어서 색 블록으로 대신한다 */}
             <div
@@ -302,11 +302,11 @@ function CartRow({
             {/* 책 정보 + 품절 배지 */}
             <div className="min-w-0 flex-1">
                 <p className="text-lg font-medium">{item.title}</p>
-                <p className="mt-1 text-sm text-[#8a8278]">
+                <p className="text-muted-foreground mt-1 text-sm">
                     {item.author} · {item.publisher} · {item.theme}
                 </p>
                 {item.sold_out && (
-                    <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#fbe9e4] px-3 py-1 text-xs text-[#c0563a]">
+                    <p className="bg-post/10 text-post mt-2 inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs">
                         <AlertCircle className="size-3" />
                         품절되어 주문할 수 없어요
                     </p>
@@ -315,12 +315,12 @@ function CartRow({
 
             {item.sold_out ? (
                 // 품절: 수량 조절 대신 재입고 알림 문구 (기능은 아직 없음)
-                <span className="w-36 text-center text-sm text-[#8a8278]">
+                <span className="text-muted-foreground w-36 text-center text-sm">
                     재입고 알림 받기
                 </span>
             ) : (
                 // 수량 −/+ (최소 1권, 1권일 때 − 버튼 비활성화)
-                <div className="flex h-11 w-36 items-center justify-between rounded-full border border-[#c9bfae] px-4">
+                <div className="border-ink-2/30 flex h-11 w-36 items-center justify-between rounded-full border px-4">
                     <button
                         type="button"
                         onClick={() => onQuantity(item.quantity - 1)}
@@ -350,7 +350,7 @@ function CartRow({
                 type="button"
                 onClick={onRemove}
                 aria-label={`${item.title} 삭제`}
-                className="text-[#8a8278] hover:text-[#2b2620]"
+                className="text-muted-foreground hover:text-ink"
             >
                 <X className="size-4" />
             </button>

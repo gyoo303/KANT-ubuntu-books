@@ -2,10 +2,8 @@ export default function AboutHero() {
     return (
         <section className="pt-18 pb-16 text-center">
             <div className="max-w-page mx-auto w-full px-6">
-                <p className="text-olive text-[11px] font-medium tracking-[0.08em]">
-                    BRAND STORY · /about
-                </p>
-                <h1 className="mt-3.5 text-[clamp(40px,6vw,52px)] leading-[1.22] font-normal tracking-[-0.02em]">
+                <p className="typo-eyebrow text-olive">BRAND STORY · /about</p>
+                <h1 className="typo-display mt-3.5">
                     네가 있어
                     <br />
                     내가 있다

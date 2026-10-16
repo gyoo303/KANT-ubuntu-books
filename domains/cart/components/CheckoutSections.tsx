@@ -54,9 +54,9 @@ export default function CheckoutSections({
     return (
         <div className="mt-10 space-y-6">
             {/* ── 배송지 ── */}
-            <section className="rounded-2xl border border-[#e6dfd3] bg-[#fffdf8] p-8 md:p-10">
+            <section className="border-line bg-card rounded-2xl border p-8 md:p-10">
                 <h2 className="text-2xl font-medium">배송지</h2>
-                <p className="mt-2 text-sm text-[#5c554b]">
+                <p className="text-ink-2 mt-2 text-sm">
                     기본 배송지를 불러오거나 새로 입력할 수 있어요.
                 </p>
 
@@ -73,8 +73,8 @@ export default function CheckoutSections({
                             className={cn(
                                 'rounded-full border px-4 py-2 text-sm',
                                 useDefault === tab.value
-                                    ? 'border-[#2b2620] bg-[#2b2620] text-white'
-                                    : 'border-[#c9bfae]',
+                                    ? 'border-ink bg-ink text-white'
+                                    : 'border-ink-2/30',
                             )}
                         >
                             {tab.label}
@@ -110,9 +110,9 @@ export default function CheckoutSections({
             </section>
 
             {/* ── 결제 수단 ── */}
-            <section className="rounded-2xl border border-[#e6dfd3] bg-[#fffdf8] p-8 md:p-10">
+            <section className="border-line bg-card rounded-2xl border p-8 md:p-10">
                 <h2 className="text-2xl font-medium">결제 수단</h2>
-                <p className="mt-2 text-sm text-[#5c554b]">
+                <p className="text-ink-2 mt-2 text-sm">
                     토스페이먼츠로 안전하게 결제돼요.
                 </p>
                 {/* 선택된 버튼은 초록 테두리 + 굵은 글씨 */}
@@ -126,8 +126,8 @@ export default function CheckoutSections({
                             className={cn(
                                 'h-16 rounded-lg border text-sm',
                                 payment === method.value
-                                    ? 'border-2 border-[#636b3a] font-semibold'
-                                    : 'border-[#c9bfae]',
+                                    ? 'border-olive border-2 font-semibold'
+                                    : 'border-ink-2/30',
                             )}
                         >
                             {method.label}
@@ -158,7 +158,7 @@ function Field({
                 value={value}
                 readOnly={readOnly}
                 onChange={(e) => onChange(e.target.value)}
-                className="mt-2 h-12 w-full rounded-lg border border-[#c9bfae] bg-white px-4 text-base read-only:bg-[#faf7f1]"
+                className="border-ink-2/30 bg-card read-only:bg-paper mt-2 h-12 w-full rounded-lg border px-4 text-base"
             />
         </label>
     );

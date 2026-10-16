@@ -22,9 +22,7 @@ export default function AboutThemes() {
                                     aria-hidden
                                 />
                             </span>
-                            <h3 className="mt-4 text-base font-medium">
-                                {title}
-                            </h3>
+                            <h3 className="typo-h3 mt-4">{title}</h3>
                             <p className="text-ink-2 mt-2 text-[11px] leading-[1.85]">
                                 {desc}
                             </p>
