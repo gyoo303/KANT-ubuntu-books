@@ -12,7 +12,7 @@
  * - TODO(db): DB가 정해지면 아래 주석의 PrismaAdapter를 다시 켠다.
  *   지금은 어댑터 없이 "JWT 쿠키만"으로 로그인 상태를 유지한다.
  *   그래서 사용자 정보가 서버 어디에도 저장되지 않고,
- *   session.user.id는 DB User.id가 아니라 "네이버가 준 사용자 고유번호"다.
+ *   session.user.id는 DB User.id가 아니라 "naver:<네이버가 준 사용자 고유번호>"다.
  *   (DB를 켜면 DB User.id로 바뀐다. 그 전에 브라우저 LocalStorage에 쌓인 데이터는 옮겨지지 않는다)
  * - TODO(email): 이메일 매직 링크 로그인을 다시 쓰기로 하면 아래 주석의 Nodemailer와 signIn 콜백을 켠다.
  *   매직 링크는 토큰을 VerificationToken 테이블에 저장하므로 TODO(db)가 먼저 풀려야 한다.

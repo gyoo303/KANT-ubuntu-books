@@ -28,15 +28,20 @@ import { formatPrice } from '@/shared/utils/formatPrice';
 import { AlertCircle, Minus, Plus, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-// 로그인 후 돌아올 주소를 붙인 로그인 화면 주소
-const SIGN_IN_URL = `/auth/signin?callbackUrl=${encodeURIComponent('/cart')}`;
+// 로그인 화면 주소. 로그인(소셜 회원가입 포함)이 끝나면 주문결제 단계(/cart?step=checkout)로 돌아온다
+const SIGN_IN_URL = `/auth/signin?callbackUrl=${encodeURIComponent('/cart?step=checkout')}`;
+
+// 'cart': 장바구니 목록만 / 'checkout': 배송지·결제 수단까지 펼친 주문결제 단계
+export type CartStep = 'cart' | 'checkout';
 
 export default function CartView({
     initialItems,
+    initialStep = 'cart',
 }: {
     initialItems: CartItem[]; // 처음 보여줄 장바구니 상품 (지금은 더미데이터)
+    initialStep?: CartStep; // 로그인 후 돌아오면 'checkout' (app/cart/page.tsx 참고)
 }) {
     const router = useRouter(); // 페이지 이동용
     const { data: session, status } = useSession(); // 로그인 상태
@@ -46,7 +51,10 @@ export default function CartView({
 
     // ── 화면 상태 ──
     const [items, setItems] = useState(initialItems); // 장바구니 상품 목록
-    const [checkoutRequested, setCheckoutRequested] = useState(false); // "구매 계속하기"를 눌렀는지
+    // "구매 계속하기"를 눌렀는지. 로그인하고 돌아왔으면(?step=checkout) 처음부터 true
+    const [checkoutRequested, setCheckoutRequested] = useState(
+        initialStep === 'checkout',
+    );
     const [agreed, setAgreed] = useState(false); // 결제 동의 체크 여부
     const [payment, setPayment] = useState<PaymentMethod>('card'); // 선택한 결제 수단
     const [paying, setPaying] = useState(false); // 결제창 여는 중 (버튼 연타 방지)
@@ -55,6 +63,14 @@ export default function CartView({
     const summary = calculateCart(items);
     // 결제 단계 중에 로그아웃하면 다시 구매 계속하기 상태로 돌아간다.
     const checkingOut = checkoutRequested && isLoggedIn;
+
+    // 로그인하고 돌아온 경우: 로그인 상태가 확인되어 주문결제 영역이 펼쳐지면 그 위치로 스크롤
+    const checkoutRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (initialStep === 'checkout' && checkingOut) {
+            checkoutRef.current?.scrollIntoView({ block: 'start' });
+        }
+    }, [initialStep, checkingOut]);
 
     // "구매 계속하기" 버튼
     const continuePurchase = () => {
@@ -173,11 +189,13 @@ export default function CartView({
 
                         {/* 회원이 "구매 계속하기"를 누른 뒤에만 배송지/결제 수단을 보여준다 */}
                         {checkingOut && (
-                            <CheckoutSections
-                                contact={contact}
-                                payment={payment}
-                                onPaymentChange={setPayment}
-                            />
+                            <div ref={checkoutRef} className="scroll-mt-24">
+                                <CheckoutSections
+                                    contact={contact}
+                                    payment={payment}
+                                    onPaymentChange={setPayment}
+                                />
+                            </div>
                         )}
                     </section>
 
@@ -250,7 +268,7 @@ export default function CartView({
                                     결제하기
                                 </button>
                                 {!contact.isValid && (
-                                    <p className="mt-3 text-center text-xs text-muted-foreground">
+                                    <p className="text-muted-foreground mt-3 text-center text-xs">
                                         배송지를 모두 입력하면 결제할 수 있어요.
                                     </p>
                                 )}

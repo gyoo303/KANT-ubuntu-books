@@ -27,7 +27,7 @@ export async function POST() {
     //   1) 요청 본문의 배송지를 검증한다. 휴대폰 번호는 가입 때 받지 않고 주문/구독 결제 화면에서 받는다.
     //      shippingAddress = { receiverName, receiverPhone, zipCode, address1, address2 }
     //      → validateShippingAddress()(domains/checkout/utils)와 같은 규칙으로 receiverPhone 형식을 확인하고, 틀리면 400
-    //   2) 주문자는 session.user.id로 연결한다. (지금은 네이버 사용자 고유번호, TODO(db): DB User.id)
+    //   2) 주문자는 session.user.id로 연결한다. (지금은 "naver:<네이버 사용자 고유번호>", TODO(db): DB User.id)
     //      TODO(db): prisma.order.create({ data: { userId: session.user.id, shippingAddress, ... } })
     //   3) receiverPhone은 주문마다 저장한다. 받는 분이 본인이 아닐 수 있어서 User.phone과 분리한다.
     //      요청에 saveAsMyPhone: true가 있으면 User.phone도 갱신한다. (다음 결제 때 연락처 칸을 미리 채우는 용도)

@@ -39,9 +39,9 @@ export default function SignInPage({
     return (
         <div className="grid min-h-[calc(100vh-4rem)] lg:grid-cols-2">
             {/* 왼쪽: 창가 일러스트 (lg 이상에서만) */}
-            <section className="bg-cream-deep hidden flex-col items-center justify-center gap-12 px-12 py-20 lg:flex">
+            <section className="bg-paper-2 hidden flex-col items-center justify-center gap-12 px-12 py-20 lg:flex">
                 <WindowIllustration />
-                <p className="text-center text-xl leading-[1.7] font-medium">
+                <p className="typo-h3 text-center">
                     창가에 불이 꺼져 있어요.
                     <br />
                     편지를 기다리고 있을게요.
@@ -51,10 +51,8 @@ export default function SignInPage({
             {/* 오른쪽: 로그인 */}
             <section className="flex items-center px-6 py-16 lg:px-20">
                 <div className="mx-auto w-full max-w-[480px]">
-                    <h1 className="text-[32px] leading-tight font-medium tracking-[-0.02em]">
-                        어서 오세요
-                    </h1>
-                    <p className="text-ink-sub mt-3 text-sm leading-relaxed">
+                    <h1 className="typo-h2">어서 오세요</h1>
+                    <p className="typo-body text-ink-2 mt-3">
                         네이버 계정으로 시작하면 처음 오신 분은 자동으로
                         가입돼요.
                     </p>
@@ -63,7 +61,7 @@ export default function SignInPage({
                         <SignInContent searchParams={searchParams} />
                     </Suspense>
 
-                    <p className="text-ink-muted mt-8 text-center text-xs leading-relaxed">
+                    <p className="typo-caption text-muted-foreground mt-8 text-center">
                         휴대폰 번호는 첫 주문 때 배송 연락처로만 받아요.
                     </p>
                 </div>
@@ -84,20 +82,18 @@ async function SignInContent({ searchParams }: { searchParams: SearchParams }) {
             {errorMessage && (
                 <div
                     role="alert"
-                    className="mt-8 flex gap-3 rounded-xl bg-[#fbe9e4] px-5 py-4 text-sm text-[#a5432b]"
+                    className="bg-post/10 text-post mt-8 flex gap-3 rounded-xl px-5 py-4 text-sm"
                 >
                     <AlertCircle className="mt-0.5 size-4 shrink-0" />
                     <p>{errorMessage}</p>
                 </div>
             )}
             {notice && (
-                <div className="bg-olive-tint mt-8 flex gap-3 rounded-xl px-5 py-4 text-sm">
+                <div className="bg-olive-soft mt-8 flex gap-3 rounded-xl px-5 py-4 text-sm">
                     <Lock className="mt-0.5 size-4 shrink-0" />
                     <div>
                         <p>{notice.title}</p>
-                        <p className="text-ink-sub mt-1">
-                            {notice.description}
-                        </p>
+                        <p className="text-ink-2 mt-1">{notice.description}</p>
                     </div>
                 </div>
             )}

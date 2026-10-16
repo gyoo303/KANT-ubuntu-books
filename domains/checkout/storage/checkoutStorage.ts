@@ -13,7 +13,7 @@
  * - 저장 공간이 꽉 찼거나 막혀 있으면 오류가 나므로 모든 읽기·쓰기를 try/catch로 감싼다.
  *
  * 저장 키: ubuntu-books:user:<회원 id>:phone / ubuntu-books:user:<회원 id>:default-address
- * (회원 id는 지금은 네이버 사용자 고유번호, DB를 켜면 DB User.id로 바뀐다)
+ * (회원 id는 지금은 "naver:<네이버 사용자 고유번호>"로 로그인할 때마다 같다. DB를 켜면 DB User.id로 바뀐다)
  */
 import { ShippingAddress } from '@/domains/cart/types/cart.types';
 import { isShippingAddressValid } from '@/domains/checkout/utils/validateShippingAddress';

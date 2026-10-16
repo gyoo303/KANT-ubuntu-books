@@ -18,7 +18,7 @@
  *
  * ⚠️ [현재 임시 상태] DB 없이 동작한다 (auth.ts 상단 주석 참고).
  * - TODO(db): 권한(role)은 DB User.role 대신 환경변수 ADMIN_EMAILS로 정한다.
- * - TODO(db): session.user.id는 DB User.id 대신 네이버 사용자 고유번호다.
+ * - TODO(db): session.user.id는 DB User.id 대신 "naver:<네이버 사용자 고유번호>"다.
  */
 import type { NextAuthConfig } from 'next-auth';
 import Naver from 'next-auth/providers/naver';
@@ -67,7 +67,8 @@ export default {
              */
             profile: (p) => ({
                 id: p.response.id,
-                name: p.response.name ?? null,
+                // '이름' 동의를 받지 않았으면 별명으로 대신한다
+                name: p.response.name ?? p.response.nickname ?? null,
                 email: p.response.email,
                 image: p.response.profile_image ?? null,
             }),
@@ -134,10 +135,21 @@ export default {
          * 그래서 로그인 순간에 role을 토큰에 복사해 두어야 이후 요청에서도 권한을 알 수 있다.
          * 주의: 관리자 목록을 바꾸면 다시 로그인해야 토큰에 반영된다.
          *
-         * TODO(db): DB를 켜면 user.role(DB User.role)을 쓰고 ADMIN_EMAILS 판별은 지운다.
-         *   if (user) token.role = user.role ?? 'MEMBER';
+         * [회원 id 고정] DB(어댑터)가 없으면 Auth.js는 로그인할 때마다 user.id를 새 무작위 UUID로 만든다.
+         * 그러면 같은 사람도 로그인할 때마다 id가 바뀌어, 회원 id로 저장한 내 연락처·기본 배송지
+         * (LocalStorage)를 다시 찾지 못한다. 그래서 바뀌지 않는 "네이버 사용자 고유번호"
+         * (account.providerAccountId)로 token.sub(= session.user.id)를 정한다.
+         * 다른 SNS가 추가돼도 겹치지 않도록 "naver:<고유번호>"처럼 provider 이름을 앞에 붙인다.
+         *
+         * TODO(db): DB를 켜면 아래 두 가지를 바꾼다.
+         *   - token.sub 덮어쓰기를 지운다 (어댑터가 DB User.id를 sub로 넣어 준다)
+         *   - role은 user.role(DB User.role)을 쓰고 ADMIN_EMAILS 판별은 지운다
+         *     if (user) token.role = user.role ?? 'MEMBER';
          */
-        jwt({ token, user }) {
+        jwt({ token, user, account }) {
+            if (account) {
+                token.sub = `${account.provider}:${account.providerAccountId}`;
+            }
             if (user) {
                 token.role = isAdminEmail(user.email, process.env.ADMIN_EMAILS)
                     ? 'ADMIN'
@@ -150,7 +162,7 @@ export default {
          * [세션 만들기] auth() / useSession()이 돌려줄 session 객체를 만든다.
          * JWT 전략에서 Auth.js는 기본으로 name·email·image만 session.user에 넣는다.
          * 사용자 id는 토큰의 sub(subject) 필드에만 있으므로 직접 옮겨 줘야
-         * (지금은 네이버 사용자 고유번호, TODO(db): DB를 켜면 DB User.id)
+         * (지금은 "naver:<네이버 사용자 고유번호>", TODO(db): DB를 켜면 DB User.id)
          * 주문 생성 등에서 session.user.id로 "누가 요청했는지"를 찾을 수 있다.
          * role도 토큰에 넣어 둔 값을 꺼내 화면·API에서 쓸 수 있게 한다.
          */

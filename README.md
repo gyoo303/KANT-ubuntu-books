@@ -174,7 +174,7 @@ npm run dev
 | 항목                  | 현재                                      | 나중에                                      |
 | --------------------- | ----------------------------------------- | ------------------------------------------- |
 | `TODO(db)`            | DB 없음. 로그인은 JWT 쿠키만 사용         | Prisma 어댑터 + `npx prisma migrate dev`    |
-| 회원 id               | 네이버 사용자 고유번호                    | DB `User.id`                                |
+| 회원 id               | `naver:<네이버 사용자 고유번호>`          | DB `User.id`                                |
 | 관리자 권한           | `.env`의 `ADMIN_EMAILS`                   | DB `User.role`                              |
 | 내 연락처·기본 배송지 | 브라우저 LocalStorage (이 브라우저에서만) | DB `User.phone` · 회원 배송지               |
 | `TODO(email)`         | 이메일 가입·로그인 꺼짐                   | Nodemailer + `docker-compose.yml`의 Mailpit |

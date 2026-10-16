@@ -52,9 +52,9 @@ export default function CheckoutSections({
     return (
         <div className="mt-10 space-y-6">
             {/* ── 배송지 ── */}
-            <section className="rounded-2xl border border-line bg-card p-8 md:p-10">
+            <section className="border-line bg-card rounded-2xl border p-8 md:p-10">
                 <h2 className="text-2xl font-medium">배송지</h2>
-                <p className="mt-2 text-sm text-ink-2">
+                <p className="text-ink-2 mt-2 text-sm">
                     상자를 받으실 분의 정보를 확인해 주세요. 연락처는 배송
                     안내에만 써요.
                 </p>
@@ -84,7 +84,7 @@ export default function CheckoutSections({
                     })}
                 </div>
                 {!savedDefault && (
-                    <p className="mt-3 text-xs text-muted-foreground">
+                    <p className="text-muted-foreground mt-3 text-xs">
                         저장된 기본 배송지가 없어요. 새 배송지로 주문하면 다음에
                         불러올 수 있어요.
                     </p>
@@ -125,7 +125,7 @@ export default function CheckoutSections({
                             }
                         />
                         {!readOnly && (
-                            <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-ink-2">
+                            <label className="text-ink-2 mt-2 flex cursor-pointer items-center gap-2 text-xs">
                                 <input
                                     type="checkbox"
                                     checked={contact.saveAsMyPhone}
@@ -134,7 +134,7 @@ export default function CheckoutSections({
                                             e.target.checked,
                                         )
                                     }
-                                    className="size-4 accent-olive"
+                                    className="accent-olive size-4"
                                 />
                                 이 번호를 내 연락처로 저장
                             </label>
@@ -154,9 +154,9 @@ export default function CheckoutSections({
             </section>
 
             {/* ── 결제 수단 ── */}
-            <section className="rounded-2xl border border-line bg-card p-8 md:p-10">
+            <section className="border-line bg-card rounded-2xl border p-8 md:p-10">
                 <h2 className="text-2xl font-medium">결제 수단</h2>
-                <p className="mt-2 text-sm text-ink-2">
+                <p className="text-ink-2 mt-2 text-sm">
                     토스페이먼츠로 안전하게 결제돼요.
                 </p>
                 {/* 선택된 버튼은 초록 테두리 + 굵은 글씨 */}
@@ -211,12 +211,10 @@ function Field({
                 placeholder={placeholder}
                 aria-invalid={error ? true : undefined}
                 onChange={(e) => onChange(e.target.value)}
-                className="mt-2 h-12 w-full rounded-lg border border-ink-2/30 bg-card read-only:bg-paper px-4 text-base aria-invalid:border-post"
+                className="border-ink-2/30 bg-card read-only:bg-paper aria-invalid:border-post mt-2 h-12 w-full rounded-lg border px-4 text-base"
             />
             {error && (
-                <span className="mt-1.5 block text-xs text-post">
-                    {error}
-                </span>
+                <span className="text-post mt-1.5 block text-xs">{error}</span>
             )}
         </label>
     );
