@@ -1,0 +1,366 @@
+// 우분투북스 DB 스키마 (Supabase PostgreSQL + Prisma 6)
+// - 인증 테이블은 Auth.js Prisma 어댑터 규격을 그대로 따른다 (필드 이름 바꾸면 로그인 깨짐)
+// - 나머지 필드 이름은 팀 TypeScript 타입과 같은 snake_case
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // Supabase 풀러 (6543, ?pgbouncer=true) - 앱 실행용
+  directUrl = env("DIRECT_URL") // Supabase 직접 연결 (5432) - 마이그레이션용
+}
+
+// ───────── 회원 · 인증 (최규형) ─────────
+
+enum UserRole {
+  MEMBER
+  ADMIN // 점주(책방지기) - /admin 접근
+}
+
+model User {
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  role             UserRole  @default(MEMBER)
+  phone            String? // 상자 배송 연락용
+  marketing_agreed Boolean   @default(false) // [선택] 어은동 편지(뉴스레터)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  cart_items    CartItem[]
+  orders        Order[]
+  subscriptions Subscription[]
+  letters       Letter[]
+  shelf_notes   ShelfNote[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String // naver, kakao
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// 이메일 매직 링크용 일회성 토큰
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ───────── 테마 서가 · 도서 (서상혁) ─────────
+
+model Theme {
+  id          String @id // URL 슬러그 (garden, table, nature, local)
+  name        String
+  short_name  String
+  description String
+  icon        String // sprout | soup | leaf | map-pin
+  sort_order  Int    @default(0)
+
+  products Product[]
+
+  @@map("themes")
+}
+
+model Product {
+  id              String   @id
+  theme_id        String
+  title           String
+  author          String
+  publisher       String
+  price           Int
+  stock           Int      @default(0) // 0이면 품절
+  is_public       Boolean  @default(true) // ADM-03 "서가에 공개"
+  one_line        String
+  curator_note    String   @db.Text // 책방지기 노트(추천사)
+  pairing_note    String?  @db.Text
+  publisher_intro String   @db.Text
+  published_at    String // YYYY-MM-DD
+  page_count      Int
+  size            String // 판형
+  isbn            String   @unique
+  cover_image_url String?
+  cover_color     String // 표지 이미지 없을 때 색
+  sort_order      Int      @default(0) // 책방지기 추천순
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  theme       Theme       @relation(fields: [theme_id], references: [id])
+  cart_items  CartItem[]
+  order_items OrderItem[]
+  box_items   BoxItem[]
+  shelf_notes ShelfNote[]
+
+  @@index([theme_id])
+  @@map("products")
+}
+
+// ───────── 장바구니 · 단품 주문 (김정민) ─────────
+
+// 회원 장바구니만 저장 (비회원은 localStorage)
+model CartItem {
+  id         String   @id @default(cuid())
+  user_id    String
+  product_id String
+  quantity   Int      @default(1)
+  selected   Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@unique([user_id, product_id]) // 같은 책은 한 줄 (수량만 증가)
+  @@map("cart_items")
+}
+
+enum OrderStatus {
+  PENDING // 결제창 열기 전 (pendingOrders.ts 메모리 저장 대체)
+  PAID // 결제 완료
+  PACKING // 포장 중
+  SHIPPING // 배송 중
+  DELIVERED // 배송 완료
+  CANCELED // 주문 취소
+  REFUNDED // 환불 완료
+  FAILED // 결제 실패
+}
+
+model Order {
+  id              String      @id // 주문번호 UB-20261011-0042 = 토스 orderId
+  user_id         String
+  status          OrderStatus @default(PENDING)
+  product_total   Int
+  shipping_fee    Int
+  payment_total   Int // 결제 승인 때 토스 금액과 비교
+  recipient       String
+  phone           String
+  zip_code        String
+  address1        String
+  address2        String?
+  delivery_memo   String?
+  payment_method  String? // card | kakaopay | naverpay | virtual_account
+  payment_key     String?     @unique // 토스 paymentKey
+  courier         String? // 택배사
+  tracking_number String? // 송장번호
+  paid_at         DateTime?
+  shipped_at      DateTime?
+  canceled_at     DateTime?
+  created_at      DateTime    @default(now())
+
+  user  User        @relation(fields: [user_id], references: [id])
+  items OrderItem[]
+
+  @@index([user_id])
+  @@index([status])
+  @@map("orders")
+}
+
+// 주문 당시 제목·가격을 복사해 둠 (나중에 가격이 바뀌어도 주문내역 유지)
+model OrderItem {
+  id         String @id @default(cuid())
+  order_id   String
+  product_id String
+  title      String
+  price      Int
+  quantity   Int
+
+  order   Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@map("order_items")
+}
+
+// ───────── 정기구독 (이연지) ─────────
+
+model SubscriptionPlan {
+  code        String   @id // MONTHLY_SINGLE_TEA, MONTHLY_DOUBLE
+  name        String
+  description String
+  price       Int
+  book_count  Int
+  goods_label String // 차, 다과
+  features    String[]
+  is_popular  Boolean  @default(false)
+  sort_order  Int      @default(0)
+
+  subscriptions Subscription[]
+
+  @@map("subscription_plans")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED // 작별 완료
+}
+
+model Subscription {
+  id               String             @id @default(cuid())
+  user_id          String
+  plan_code        String
+  status           SubscriptionStatus @default(ACTIVE)
+  recipient        String
+  phone            String
+  zip_code         String
+  address1         String
+  address2         String?
+  delivery_memo    String?
+  billing_key      String? // 토스 정기결제 빌링키
+  card_label       String? // 화면 표시용 "국민카드 ****-1234"
+  billing_day      Int                @default(5) // 매월 결제일
+  next_billing_at  DateTime?
+  paused_months    String[] // 한 달 쉬어가기 ["2026-11"] - 이 달은 결제·발송 제외
+  farewell_message String?            @db.Text // INT-05 작별 안부 (선택, 답장 없음)
+  started_at       DateTime           @default(now())
+  canceled_at      DateTime?
+
+  user     User                  @relation(fields: [user_id], references: [id])
+  plan     SubscriptionPlan      @relation(fields: [plan_code], references: [code])
+  payments SubscriptionPayment[]
+  letters  Letter[]
+
+  @@index([user_id])
+  @@map("subscriptions")
+}
+
+enum PaymentStatus {
+  PAID
+  FAILED
+}
+
+// 22 구독관리 "결제 내역"
+model SubscriptionPayment {
+  id              String        @id @default(cuid())
+  subscription_id String
+  box_month       String // 2026-10
+  amount          Int
+  status          PaymentStatus
+  payment_key     String?       @unique
+  paid_at         DateTime      @default(now())
+
+  subscription Subscription @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
+
+  @@unique([subscription_id, box_month])
+  @@map("subscription_payments")
+}
+
+// ───────── 편지 · 답장 상자 (이연지) ─────────
+
+// 창가의 촛불 3상태 (INT-01). 대시보드에서 바꾸면 촛불 위젯이 바뀐다.
+enum LetterStatus {
+  UNREAD // 편지 접수 완료 - 창문 어두움
+  CURATING // 책방지기가 열어서 고르는 중 - 촛불 점등
+  SHIPPED // 발송 완료 - 우체통 불빛
+}
+
+model Letter {
+  id              String       @id @default(cuid())
+  user_id         String
+  subscription_id String
+  box_month       String // 2026-10 (이 편지로 받는 상자)
+  title           String
+  content         String       @db.Text
+  mood_tags       String[]
+  status          LetterStatus @default(UNREAD)
+  submitted_at    DateTime     @default(now())
+  read_at         DateTime? // 점주가 연 시각 (CURATING 전환)
+  shipped_at      DateTime?
+
+  user         User         @relation(fields: [user_id], references: [id])
+  subscription Subscription @relation(fields: [subscription_id], references: [id])
+  box          Box?
+
+  @@unique([subscription_id, box_month]) // 한 구독에 한 달 한 통
+  @@index([user_id])
+  @@index([status])
+  @@map("letters")
+}
+
+// 책방지기의 답장 상자 (편지 1통 ↔ 상자 1개). ADM-01에서 확정할 때 생성
+model Box {
+  id                 String    @id @default(cuid())
+  letter_id          String    @unique
+  hint               String // 해금 전에만 보이는 힌트 한 문장 (Teaser)
+  reply_title        String // "잠 못 드는 밤을 위한 세 페이지"
+  reply_content      String    @db.Text // 답장 전문 (Markdown, 해금 후 공개)
+  pairing_note       String? // 페어링 먹거리 (해금 후 공개)
+  postcard_image_url String? // 손글씨 엽서 스캔본 (Supabase Storage)
+  unlock_code        String    @unique // 6자리 난수
+  unlock_attempts    Int       @default(0) // 5회 넘으면 잠금
+  courier            String?
+  tracking_number    String?
+  unlocked_at        DateTime? // 값이 있으면 해금 완료
+  created_at         DateTime  @default(now())
+
+  letter Letter    @relation(fields: [letter_id], references: [id], onDelete: Cascade)
+  items  BoxItem[]
+
+  @@map("boxes")
+}
+
+// 상자에 담긴 책 (1~3권)
+model BoxItem {
+  id         String @id @default(cuid())
+  box_id     String
+  product_id String
+  reason     String @db.Text // 책방지기가 고른 이유
+  sort_order Int    @default(0)
+
+  box     Box     @relation(fields: [box_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@unique([box_id, product_id])
+  @@map("box_items")
+}
+
+// ───────── 나의 서가 (서상혁) ─────────
+
+// 해금된 책에 남기는 비공개 한 줄 (INT-04, 100자)
+model ShelfNote {
+  id         String   @id @default(cuid())
+  user_id    String
+  product_id String
+  content    String   @db.VarChar(100)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@unique([user_id, product_id]) // 책 한 권에 한 줄
+  @@map("shelf_notes")
+}

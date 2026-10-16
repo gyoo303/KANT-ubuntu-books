@@ -42,3 +42,4 @@ next-env.d.ts
 
 # 파일 업로드 경로
 /uploads
+/lib/generated/prisma
