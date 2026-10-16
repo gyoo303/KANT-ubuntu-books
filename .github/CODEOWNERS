@@ -1,0 +1,18 @@
+# 공통 영역: 이 경로가 바뀐 PR은 공통 담당자에게 자동으로 리뷰가 요청됩니다.
+# 기능 영역 담당자는 CONTRIBUTING.md의 담당 영역 표를 팀에서 확정한 뒤 추가합니다.
+
+/shared/                @gyoo303
+/app/layout.tsx         @gyoo303
+/app/globals.css        @gyoo303
+/app/fonts/             @gyoo303
+/app/styleguide/        @gyoo303
+/components.json        @gyoo303
+/package.json           @gyoo303
+/.prettierrc            @gyoo303
+/.prettierignore        @gyoo303
+/eslint.config.mjs      @gyoo303
+/next.config.ts         @gyoo303
+/tsconfig.json          @gyoo303
+/.vscode/               @gyoo303
+/.github/               @gyoo303
+/.claude/               @gyoo303
