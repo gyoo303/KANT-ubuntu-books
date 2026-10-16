@@ -1,0 +1,226 @@
+// ⚠️ TODO(db): 현재 앱은 이 스키마(DB)를 사용하지 않는다.
+//   DB가 정해질 때까지 로그인은 JWT 쿠키만, 사용자 연락처·배송지는 브라우저 LocalStorage에 임시 저장한다.
+//   (domains/checkout/storage/checkoutStorage.ts 참고)
+//   DB를 켤 때: auth.ts의 PrismaAdapter, lib/prisma.ts 주석 해제 → DATABASE_URL 설정 → npx prisma migrate dev
+//
+// 우분투북스 통합 스펙 v3.3 (5장) 기준 스키마
+// + 인증(Auth.js) 반영: User 필드 조정, Account·VerificationToken 추가
+//   세션은 JWT 전략이므로 Session 모델은 두지 않는다.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ----------------------------------------------------
+// 1. 유저 & 권한 & 인증
+// ----------------------------------------------------
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  emailVerified  DateTime? // Auth.js 어댑터 필수
+  name           String? // 네이버 동의 범위에 따라 비어 있을 수 있음
+  // 회원 본인 연락처. 가입 때는 받지 않고, 결제 화면에서 "내 연락처로 저장"을 고르면 채워진다.
+  // 다음 결제 때 배송지 연락처(receiverPhone)를 미리 채우는 용도로만 쓴다.
+  // 실제 배송 연락처는 주문·구독마다 shippingAddress.receiverPhone에 따로 저장한다 (받는 분이 본인이 아닐 수 있음).
+  phone          String?
+  image          String?
+  role           UserRole  @default(MEMBER) // MEMBER, ADMIN
+  termsAgreedAt  DateTime? // TODO(email): 이메일 가입에서만 기록. 소셜 가입은 약관 동의를 별도로 받지 않음
+  marketingOptIn Boolean   @default(false) // TODO(email): 이메일 가입 화면의 [선택] 뉴스레터 동의
+  createdAt      DateTime  @default(now())
+
+  accounts      Account[]
+  subscription  Subscription?
+  letters       ReaderLetter[]
+  curatedPicks  CuratorLetter[]
+  myShelfNotes  MyShelfNote[]
+  farewellNotes FarewellNote[]
+  orders        Order[]
+}
+
+enum UserRole {
+  MEMBER
+  ADMIN
+}
+
+// 소셜 로그인 연동 계정 (Auth.js 어댑터가 관리)
+// - User 1명 : Account N개. 네이버로 가입한 뒤 같은 이메일로 다른 SNS에 로그인하면 Account가 하나 더 생긴다.
+// - provider + providerAccountId(그 SNS에서의 사용자 고유번호) 조합으로 "이 SNS 계정은 누구의 것인지" 찾는다.
+// - 토큰 필드는 OAuth 응답을 그대로 저장하는 자리라 Auth.js가 정한 snake_case 이름을 쓴다.
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// TODO(email): 이메일 매직 링크 토큰 (Auth.js 어댑터가 관리). 이메일 로그인을 켤 때만 사용
+// - identifier: 메일을 받은 이메일 주소
+// - token: 링크에 담긴 토큰의 해시값 (원본은 메일에만 있음)
+// - 링크를 누르면 대조 후 즉시 삭제되는 1회용이며, expires가 지나면 쓸 수 없다.
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ----------------------------------------------------
+// 2. 정기구독 & 감성 인터랙션 모델
+// ----------------------------------------------------
+model Subscription {
+  id              String             @id @default(uuid())
+  userId          String             @unique
+  user            User               @relation(fields: [userId], references: [id])
+  status          SubscriptionStatus @default(ACTIVE)
+  planType        String // "MONTHLY_SINGLE_TEA", "MONTHLY_DOUBLE"
+  billingKey      String // 토스 빌링키
+  nextBillingDate DateTime
+  shippingAddress Json // { zipCode, address1, address2, receiverName, receiverPhone } ← receiverPhone: 구독 결제 화면에서 입력
+  createdAt       DateTime           @default(now())
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELED
+}
+
+// 독자가 띄우는 편지 (취향 온보딩)
+model ReaderLetter {
+  id       String           @id @default(uuid())
+  userId   String
+  user     User             @relation(fields: [userId], references: [id])
+  subject  String
+  content  String           @db.Text
+  moodTags String[] // ["#비오는날", "#느린휴식"]
+  status   LetterDeskStatus @default(UNREAD)
+
+  curatorLetter CuratorLetter?
+  createdAt     DateTime       @default(now())
+}
+
+enum LetterDeskStatus {
+  UNREAD // 서점 접수됨 (창가 어두움)
+  CURATING // 점주가 서가에서 책 고르는 중 (창가 촛불 점등)
+  SHIPPED // 발송 완료 (우체통 점등 및 마이페이지 최초 진입 애니메이션)
+}
+
+// 점주의 답장 서신 및 디지털 블라인드 북
+model CuratorLetter {
+  id             String       @id @default(uuid())
+  readerLetterId String       @unique
+  readerLetter   ReaderLetter @relation(fields: [readerLetterId], references: [id])
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+
+  // 블라인드 정보 (언박싱 전 노출)
+  teaserQuote  String // 책을 고른 이유 힌트 문장
+  pairingNotes String? // 이번 달 보낸 차/먹거리 안내
+
+  // 언박싱 해금 정보 (QR 없이 6자리 고유 난수 코드 사용)
+  unlockCode    String // 실물 택배 상자에 동봉된 6자리 고유 난수 코드
+  isUnlocked    Boolean @default(false)
+  selectedBooks Json // [{ title, author, publisher, coverImg, reason }]
+  replyBody     String  @db.Text // 점주의 답장 편지 전문
+  handwriteImg  String? // 손글씨 엽서 사진 URL
+
+  shippedAt  DateTime?
+  unlockedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  shelfNotes MyShelfNote[]
+}
+
+// 개인 서가 한 줄 아카이브
+model MyShelfNote {
+  id              String        @id @default(uuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  curatorLetterId String
+  curatorLetter   CuratorLetter @relation(fields: [curatorLetterId], references: [id])
+
+  bookTitle      String
+  oneLineThought String // 100자 내외 짧은 감상/기억할 문장
+  recordedAt     DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// 작별 안부 편지
+model FarewellNote {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  closingMessage String?  @db.Text
+  createdAt      DateTime @default(now())
+}
+
+// ----------------------------------------------------
+// 3. 커머스 모델
+// ----------------------------------------------------
+model Product {
+  id             String   @id @default(uuid())
+  category       String // "GARDEN", "TABLE", "NATURE", "LOCAL"
+  title          String
+  author         String?
+  publisher      String?
+  price          Int
+  stock          Int      @default(0)
+  curatorComment String   @db.Text // 책방지기 추천사
+  pairingGuide   String? // 페어링 메모
+  coverImageUrl  String
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String? // 비회원 주문 배제, 회원 전용 주문 처리
+  user            User?       @relation(fields: [userId], references: [id])
+  orderNumber     String      @unique
+  totalAmount     Int
+  paymentKey      String?
+  status          OrderStatus @default(PAID)
+  shippingAddress Json // { zipCode, address1, address2, receiverName, receiverPhone } ← receiverPhone: 책 결제 화면에서 입력
+  orderItems      OrderItem[]
+  createdAt       DateTime    @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Int
+}

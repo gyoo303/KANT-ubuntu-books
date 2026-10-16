@@ -137,40 +137,48 @@ npm install
 
 ### 2. Environment Variables (.env)
 
-루트 경로에 `.env` 파일을 생성하고 아래 항목을 설정합니다.
+`.env.example`을 `.env`로 복사한 뒤 값을 채웁니다. 네이버 로그인 로컬 테스트에는 아래 3개만 있으면 됩니다.
+**Docker, DB, 메일 서버는 필요 없습니다.**
 
 ```env
-DATABASE_URL="postgresql://username:password@localhost:5432/ubuntubooks?schema=public"
-
-# NextAuth
-NEXTAUTH_SECRET="your-nextauth-secret"
-NEXTAUTH_URL="http://localhost:3000"
-
-# Social Auth Providers
-KAKAO_CLIENT_ID="your-kakao-client-id"
-KAKAO_CLIENT_SECRET="your-kakao-client-secret"
-NAVER_CLIENT_ID="your-naver-client-id"
-NAVER_CLIENT_SECRET="your-naver-client-secret"
-
-# Toss Payments
-TOSS_PAYMENTS_SECRET_KEY="test_sk_..."
-NEXT_PUBLIC_TOSS_PAYMENTS_CLIENT_KEY="test_ck_..."
+AUTH_SECRET="..."        # npx auth secret 으로 생성
+AUTH_NAVER_ID="..."
+AUTH_NAVER_SECRET="..."
+ADMIN_EMAILS=""          # (선택) 임시 관리자 이메일, 쉼표로 구분
 ```
 
-### 3. Database Migration & Prisma Client
+네이버 개발자센터에서 애플리케이션을 등록할 때:
 
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
+- 사용 API: 네이버 로그인 / 제공 정보: **이메일(필수)**, 이름
+- 서비스 URL: `http://localhost:3000`
+- Callback URL: `http://localhost:3000/api/auth/callback/naver`
+- 검수 전("개발 중")에는 앱 등록자와 **멤버관리에 등록한 네이버 아이디만** 로그인할 수 있습니다.
 
-### 4. Run Development Server
+### 3. Run Development Server
 
 ```bash
 npm run dev
 ```
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)으로 접속하여 플랫폼을 확인합니다.
+
+### 4. 로그인 테스트
+
+1. `/mypage`에 접속하면 `/auth/signin?callbackUrl=...`로 이동합니다 (로그인 필요 페이지).
+2. **네이버로 계속하기**를 누르면 네이버 로그인 후 원래 페이지로 돌아옵니다. 처음이면 자동으로 가입됩니다.
+3. 헤더에 마이페이지 · 로그아웃이 보이면 성공입니다.
+4. 장바구니(`/cart`)에서 **구매 계속하기** → 배송지의 연락처 칸에서 휴대폰 번호를 입력합니다 (가입 때는 받지 않음).
+
+### ⚠️ 임시 상태 (TODO)
+
+| 항목                  | 현재                                      | 나중에                                      |
+| --------------------- | ----------------------------------------- | ------------------------------------------- |
+| `TODO(db)`            | DB 없음. 로그인은 JWT 쿠키만 사용         | Prisma 어댑터 + `npx prisma migrate dev`    |
+| 회원 id               | `naver:<네이버 사용자 고유번호>`          | DB `User.id`                                |
+| 관리자 권한           | `.env`의 `ADMIN_EMAILS`                   | DB `User.role`                              |
+| 내 연락처·기본 배송지 | 브라우저 LocalStorage (이 브라우저에서만) | DB `User.phone` · 회원 배송지               |
+| `TODO(email)`         | 이메일 가입·로그인 꺼짐                   | Nodemailer + `docker-compose.yml`의 Mailpit |
+| `TODO(kakao)`         | 카카오 로그인 꺼짐                        | 비즈 앱 전환 후 활성화                      |
 
 ---
 

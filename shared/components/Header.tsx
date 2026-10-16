@@ -1,3 +1,4 @@
+import HeaderAuthLinks from '@/shared/components/HeaderAuthLinks';
 import HeaderMenu from '@/shared/components/HeaderMenu';
 import HeaderNav, { NavLinks } from '@/shared/components/HeaderNav';
 import { ShoppingBag } from 'lucide-react';
@@ -44,12 +45,7 @@ export default function Header() {
                             </span>
                         )}
                     </Link>
-                    <Link
-                        href="/auth/signin"
-                        className="text-ink-2 hover:text-ink hidden text-xs transition-colors lg:inline"
-                    >
-                        로그인
-                    </Link>
+                    <HeaderAuthLinks variant="bar" />
                     <Link
                         href="/subscription"
                         className="bg-ink hidden h-8 items-center rounded-full px-4 text-xs font-bold text-white transition-colors hover:bg-black lg:inline-flex"
