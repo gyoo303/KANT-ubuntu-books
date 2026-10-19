@@ -1,4 +1,6 @@
+import PlayOnView from '@/shared/components/PlayOnView';
 import { SHOP_INFO } from '@/shared/constants/shop';
+import { TITLE_LINE, titleLineStyle } from '../_motion';
 import SectionHeading from './SectionHeading';
 
 const INFO_ROWS = [
@@ -16,9 +18,20 @@ export default function AboutSpace() {
             <div className="max-w-page mx-auto grid w-full grid-cols-1 gap-7 px-6 md:grid-cols-2 md:gap-12">
                 <div>
                     <SectionHeading eyebrow="THE SPACE">
-                        대전 어은동,
-                        <br />
-                        골목 끝 작은 책방
+                        <PlayOnView>
+                            <span
+                                className={TITLE_LINE}
+                                style={titleLineStyle(0)}
+                            >
+                                대전 어은동,
+                            </span>
+                            <span
+                                className={TITLE_LINE}
+                                style={titleLineStyle(1)}
+                            >
+                                골목 끝 작은 책방
+                            </span>
+                        </PlayOnView>
                     </SectionHeading>
                 </div>
 

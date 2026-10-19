@@ -1,3 +1,4 @@
+import FadeUpOnView from '@/shared/components/FadeUpOnView';
 import { THEMES } from '../_data';
 import SectionHeading from './SectionHeading';
 
@@ -6,7 +7,9 @@ export default function AboutThemes() {
         <section className="pt-10 pb-28">
             <div className="max-w-page mx-auto w-full px-6">
                 <SectionHeading eyebrow="FOUR THEMES">
-                    우분투북스가 붙드는 네 가지 이야기
+                    <FadeUpOnView duration={1500} distance={24}>
+                        우분투북스가 붙드는 네 가지 이야기
+                    </FadeUpOnView>
                 </SectionHeading>
 
                 <ul className="border-ink-2 mt-9 grid grid-cols-1 gap-x-6 gap-y-10 border-t pt-[30px] sm:grid-cols-2 md:grid-cols-4 md:gap-y-6">

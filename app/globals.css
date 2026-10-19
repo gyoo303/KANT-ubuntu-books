@@ -150,6 +150,30 @@
     line-height: 1.4;
 }
 
+/*
+ * 타이핑 모션 — shared/constants/motion.ts 의 TYPE_IN 이 쓴다.
+ * 글자 하나하나에 붙이고, 수치는 style 로 넘긴다.
+ *   --motion-delay: 이 글자가 나타나는 시각 / --motion-interval: 글자 사이 간격
+ * 제 차례가 되면 글자가 바로 나타나고, 다음 글자가 나올 때까지 오른쪽에 커서가 보인다.
+ * 커서 색은 글자색(currentColor)을 그대로 따른다.
+ */
+@keyframes type-in {
+    from {
+        opacity: 0;
+    }
+}
+@keyframes type-caret {
+    from,
+    to {
+        box-shadow: 0.08em 0 0 0 currentColor;
+    }
+}
+@utility motion-type-in {
+    animation:
+        type-in 1ms var(--motion-delay, 0ms) both,
+        type-caret var(--motion-interval, 0ms) var(--motion-delay, 0ms);
+}
+
 /* 사진이 들어오기 전 이미지 자리 표시용 사선 패턴 */
 @utility bg-stripes {
     background-image: repeating-linear-gradient(

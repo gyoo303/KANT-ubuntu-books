@@ -1,12 +1,17 @@
+import { TITLE_LINE, titleLineStyle } from '../_motion';
+
 export default function AboutHero() {
     return (
         <section className="pt-18 pb-16 text-center">
             <div className="max-w-page mx-auto w-full px-6">
                 <p className="typo-eyebrow text-olive">BRAND STORY · /about</p>
                 <h1 className="typo-display mt-3.5">
-                    네가 있어
-                    <br />
-                    내가 있다
+                    <span className={TITLE_LINE} style={titleLineStyle(0)}>
+                        네가 있어
+                    </span>
+                    <span className={TITLE_LINE} style={titleLineStyle(1)}>
+                        내가 있다
+                    </span>
                 </h1>
                 <p className="text-muted-foreground mt-[18px] text-[11px] tracking-[0.06em]">
                     UBUNTU · Umuntu ngumuntu ngabantu

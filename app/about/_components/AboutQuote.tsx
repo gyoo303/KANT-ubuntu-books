@@ -1,3 +1,5 @@
+import PlayOnView from '@/shared/components/PlayOnView';
+import TypingText from '@/shared/components/TypingText';
 import Link from 'next/link';
 
 const PILL =
@@ -8,9 +10,13 @@ export default function AboutQuote() {
         <section className="bg-paper-2 pt-24 pb-20 text-center">
             <div className="max-w-page mx-auto w-full px-6">
                 <blockquote className="font-serif text-[clamp(19px,2.6vw,22px)] leading-[1.6]">
-                    “빠른 배송 대신, 한 사람을 위해 고르는 시간을
-                    <br className="max-sm:hidden" />
-                    보내드리고 싶었어요.”
+                    <PlayOnView>
+                        <TypingText interval={70}>
+                            “빠른 배송 대신, 한 사람을 위해 고르는 시간을{' '}
+                            <br className="max-sm:hidden" />
+                            보내드리고 싶었어요.”
+                        </TypingText>
+                    </PlayOnView>
                 </blockquote>
                 <p className="text-muted-foreground mt-[26px] text-[10px]">
                     — 우분투북스 책방지기
