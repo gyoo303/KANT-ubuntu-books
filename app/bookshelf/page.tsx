@@ -9,6 +9,7 @@ import BookshelfToolbar from '@/domains/products/components/BookshelfToolbar';
 import ProductCard from '@/domains/products/components/ProductCard';
 import ThemeTabs from '@/domains/products/components/ThemeTabs';
 import { parseBookshelfQuery } from '@/domains/products/utils/bookshelfQuery';
+import { Suspense } from 'react';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -19,9 +20,6 @@ export default async function BookshelfPage({
     searchParams: SearchParams;
 }) {
     const [themes, theme] = await Promise.all([getThemes(), getShelfTheme()]);
-    const query = parseBookshelfQuery(await searchParams);
-    const { items, totalPages } = await getProducts(query);
-    const DISPLAY_COUNT = 24; // 화면에 보여줄 책 수 (디자인 시안 기준 고정 값)
 
     return (
         <BookshelfShell>
@@ -58,33 +56,66 @@ export default async function BookshelfPage({
                 </div>
             </section>
 
-            <div>
-                <BookshelfToolbar query={query} totalCount={DISPLAY_COUNT} />
-
-                {items.length > 0 ? (
-                    <ul className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-8">
-                        {items.map((product) => (
-                            <li key={product.id}>
-                                <ProductCard
-                                    product={product}
-                                    themeLabel={theme.short_name}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className="text-ink-2 py-20 text-center text-sm">
-                        조건에 맞는 책이 없어요.
-                    </p>
-                )}
-
-                <div>
-                    <BookshelfPagination
-                        query={query}
-                        totalPages={totalPages}
-                    />
-                </div>
-            </div>
+            {/* 주소(?sort=, ?page=)에 따라 바뀌는 부분만 Suspense 안에서 읽어요 → 위쪽은 미리 만들어 둘 수 있어요 */}
+            <Suspense fallback={<BookshelfListSkeleton />}>
+                <BookshelfList
+                    searchParams={searchParams}
+                    themeLabel={theme.short_name}
+                />
+            </Suspense>
         </BookshelfShell>
+    );
+}
+
+const DISPLAY_COUNT = 24; // 화면에 보여줄 책 수 (디자인 시안 기준 고정 값)
+
+// 정렬 · 품절 제외 · 페이지에 따라 바뀌는 책 목록
+async function BookshelfList({
+    searchParams,
+    themeLabel,
+}: {
+    searchParams: SearchParams;
+    themeLabel: string;
+}) {
+    const query = parseBookshelfQuery(await searchParams);
+    const { items, totalPages } = await getProducts(query);
+
+    return (
+        <div>
+            <BookshelfToolbar query={query} totalCount={DISPLAY_COUNT} />
+
+            {items.length > 0 ? (
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-8">
+                    {items.map((product) => (
+                        <li key={product.id}>
+                            <ProductCard
+                                product={product}
+                                themeLabel={themeLabel}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="text-ink-2 py-20 text-center text-sm">
+                    조건에 맞는 책이 없어요.
+                </p>
+            )}
+
+            <BookshelfPagination query={query} totalPages={totalPages} />
+        </div>
+    );
+}
+
+// 목록을 불러오는 동안 보여줄 자리
+function BookshelfListSkeleton() {
+    return (
+        <div aria-hidden="true" className="animate-pulse">
+            <div className="bg-paper-2 mb-6 h-6 w-40 rounded" />
+            <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-8">
+                {Array.from({ length: 6 }, (_, i) => (
+                    <div key={i} className="bg-paper-2 aspect-[336/350] rounded-2xl" />
+                ))}
+            </div>
+        </div>
     );
 }
