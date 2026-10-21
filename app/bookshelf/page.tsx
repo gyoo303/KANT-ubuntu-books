@@ -21,8 +21,6 @@ const ALL_SHELVES = {
         '네 개의 테마 서가에 꽂힌 책을 한곳에 모았어요. 마음이 가는 테마를 골라 천천히 둘러보세요.',
 };
 
-const GARDEN_DISPLAY_COUNT = 24; // 텃밭 서가에 보여줄 책 수 (디자인 시안 기준 고정 값)
-
 // [SHP-01] 테마 서가 목록 (테마 탭 · 정렬 · 품절 제외 · 페이지네이션)
 export default function BookshelfPage({
     searchParams,
@@ -72,8 +70,6 @@ async function BookshelfContent({
     const shortNames = new Map(themes.map((t) => [t.id, t.short_name]));
 
     const { items, totalCount, totalPages } = await getProducts(query);
-    const displayCount =
-        query.themeId === DEFAULT_THEME_ID ? GARDEN_DISPLAY_COUNT : totalCount;
 
     return (
         <>
@@ -101,7 +97,7 @@ async function BookshelfContent({
             </section>
 
             <div>
-                <BookshelfToolbar query={query} totalCount={displayCount} />
+                <BookshelfToolbar query={query} totalCount={totalCount} />
 
                 {items.length > 0 ? (
                     <ul className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-8">
