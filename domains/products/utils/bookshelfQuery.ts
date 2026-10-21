@@ -8,11 +8,19 @@ import type {
 
 export const BOOKSHELF_PATH = '/bookshelf';
 
-export const PRODUCT_SORT_OPTIONS: { value: ProductSort; label: string }[] = [
-    { value: 'recommended', label: '책방지기 추천순' },
-    { value: 'price_asc', label: '낮은 가격순' },
-    { value: 'price_desc', label: '높은 가격순' },
-    { value: 'title', label: '제목순' },
+export const PRODUCT_SORT_OPTIONS: {
+    value: ProductSort;
+    label: string;
+    hint: string; // 정렬 메뉴에 보여줄 한 줄 설명
+}[] = [
+    {
+        value: 'recommended',
+        label: '책방지기 추천순',
+        hint: '책방지기가 먼저 건네고 싶은 순서',
+    },
+    { value: 'price_asc', label: '낮은 가격순', hint: '가볍게 한 권 들이고 싶을 때' },
+    { value: 'price_desc', label: '높은 가격순', hint: '오래 곁에 둘 책을 찾을 때' },
+    { value: 'title', label: '제목순', hint: '가나다 순서로 천천히' },
 ];
 
 const SORTS = PRODUCT_SORT_OPTIONS.map((o) => o.value);
