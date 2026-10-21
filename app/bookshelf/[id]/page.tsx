@@ -9,6 +9,7 @@ import BookCover from '@/domains/products/components/BookCover';
 import ProductGallery from '@/domains/products/components/ProductGallery';
 import ProductPurchasePanel from '@/domains/products/components/ProductPurchasePanel';
 import ThemeIcon from '@/domains/products/components/ThemeIcon';
+import { buildBookshelfHref } from '@/domains/products/utils/bookshelfQuery';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { Leaf } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -73,7 +74,7 @@ async function ProductDetail({ params }: { params: Params }) {
                     <>
                         {' / '}
                         <Link
-                            href="/bookshelf"
+                            href={buildBookshelfHref({ themeId: theme.id })}
                             className="hover:text-ink hover:underline"
                         >
                             {theme.name}
@@ -90,7 +91,7 @@ async function ProductDetail({ params }: { params: Params }) {
                 <div>
                     {theme && (
                         <Link
-                            href="/bookshelf"
+                            href={buildBookshelfHref({ themeId: theme.id })}
                             className="bg-olive-soft text-olive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px]"
                         >
                             <ThemeIcon name={theme.icon} className="h-3 w-3" />

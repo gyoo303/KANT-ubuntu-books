@@ -1,38 +1,52 @@
 import ThemeIcon from '@/domains/products/components/ThemeIcon';
-import type { Theme } from '@/domains/products/types/product.types';
+import type {
+    ProductListQuery,
+    Theme,
+} from '@/domains/products/types/product.types';
+import {
+    ALL_THEME_ID,
+    buildBookshelfHref,
+} from '@/domains/products/utils/bookshelfQuery';
 import { cn } from '@/shared/utils/cn';
+import Link from 'next/link';
 
 interface ThemeTabsProps {
     themes: Theme[];
-    activeThemeId: string; // 선택된 것처럼 보일 탭
+    query: ProductListQuery; // 지금 고른 테마·정렬·품절 제외
 }
 
-// 테마 탭 (표시 전용) — 디자인대로 탭은 보여주지만, 눌러도 다른 테마로 이동하지 않아요.
-export default function ThemeTabs({ themes, activeThemeId }: ThemeTabsProps) {
-    const tabs = [{ id: 'all', name: '전체', icon: null }, ...themes];
+// 테마 탭 — 누르면 ?theme= 가 바뀌고 1페이지로 돌아가요. (정렬·품절 제외는 그대로 유지)
+export default function ThemeTabs({ themes, query }: ThemeTabsProps) {
+    const tabs = [{ id: ALL_THEME_ID, name: '전체', icon: null }, ...themes];
 
     return (
-        <div className="mt-8 flex flex-wrap gap-2.5">
+        <nav aria-label="테마 서가" className="mt-8 flex flex-wrap gap-2.5">
             {tabs.map((tab) => {
-                const active = tab.id === activeThemeId;
+                const active = tab.id === query.themeId;
                 return (
-                    <span
+                    <Link
                         key={tab.id}
-                        aria-current={active ? 'true' : undefined}
+                        href={buildBookshelfHref({
+                            ...query,
+                            themeId: tab.id,
+                            page: 1,
+                        })}
+                        scroll={false}
+                        aria-current={active ? 'page' : undefined}
                         className={cn(
-                            'inline-flex h-[46px] cursor-default items-center gap-2 rounded-full border px-[22px] text-[15px] select-none',
+                            'focus-visible:ring-olive/40 inline-flex h-[46px] items-center gap-2 rounded-full border px-[22px] text-[15px] transition-colors outline-none select-none focus-visible:ring-3',
                             active
                                 ? 'border-olive bg-olive font-bold text-white'
-                                : 'border-line text-ink-2',
+                                : 'border-line text-ink-2 hover:border-olive hover:text-ink',
                         )}
                     >
                         {tab.icon && (
                             <ThemeIcon name={tab.icon} className="size-4" />
                         )}
                         {tab.name}
-                    </span>
+                    </Link>
                 );
             })}
-        </div>
+        </nav>
     );
 }
