@@ -36,6 +36,7 @@ export interface Product {
 export type ProductSort = 'recommended' | 'price_asc' | 'price_desc' | 'title';
 
 export interface ProductListQuery {
+    themeId: string; // 테마 슬러그 (예: garden), 'all' 이면 모든 테마
     hideSoldOut: boolean;
     sort: ProductSort;
     page: number;
